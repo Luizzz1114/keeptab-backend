@@ -3,7 +3,7 @@ import JornadasRepository from '../repositories/Jornadas.repository';
 import VentasRepository from '../repositories/Ventas.repository';
 
 class JornadasService {
-
+  
   private ventasRepository: VentasRepository;
   private jornadasRepository: JornadasRepository;
 
@@ -15,25 +15,34 @@ class JornadasService {
   async abrir(data: AbrirJornadaDTO) {
     const jornadaAbierta = await this.jornadasRepository.getJornadaAbierta();
     if (jornadaAbierta) {
-      return { success: false, type: 'CONFLICT', message: 'Ya existe una jornada abierta. Ciérrala antes de abrir otra.' };
+      return { success: false, type: 'CONFLICT', message: 'Ya existe una jornada abierta.' };
     }
-    const jornada = await this.jornadasRepository.create(data);
-    return { success: true, data: jornada };
+    try {
+      const jornada = await this.jornadasRepository.create(data);
+      return { success: true, data: jornada };
+    } catch (error) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 
   async getAll() {
-    return await this.jornadasRepository.getAll();
+    const jornadas = await this.jornadasRepository.getAll();
+    return { success: true, data: jornadas };
   }
 
   async getById(id: number) {
-    return await this.jornadasRepository.getById(id);
+    const jornada = await this.jornadasRepository.getById(id);
+    if (!jornada) return { success: false, type: 'NOT_FOUND', message: 'Jornada no encontrada' };
+    return { success: true, data: jornada };
   }
 
   async getEstadoActual() {
     const jornada = await this.jornadasRepository.getJornadaAbierta();
-    if (!jornada) return { success: false, message: 'No hay ninguna jornada abierta' };
+    if (!jornada) return { success: false, type: 'NOT_FOUND', message: 'No hay ninguna jornada abierta actualmente' };
+    
     const ahora = new Date();
     const ventasHoy = await this.ventasRepository.getSumVentasPagadas(jornada.apertura, ahora);
+    
     return {
       success: true,
       data: {
@@ -49,29 +58,40 @@ class JornadasService {
   async cerrar(id: number, data: CerrarJornadaDTO) {
     const jornada = await this.jornadasRepository.getById(id);
     if (!jornada) return { success: false, type: 'NOT_FOUND', message: 'Jornada no encontrada' };
-    
-    const ahora = new Date();
-    const ingresosVentas = await this.ventasRepository.getSumVentasPagadas(jornada.apertura, ahora);
-    const fondo = Number(jornada.fondo_inicial);
-    const fisico = data.total_fisico;
-    const esperado = fondo + ingresosVentas;
+    if (jornada.estatus === 'CERRADA') return { success: false, type: 'CONFLICT', message: 'Esta jornada ya se encuentra cerrada' };
 
-    jornada.estatus = 'CERRADA';
-    jornada.cierre = ahora;
-    jornada.total_fisico = fisico;
-    jornada.total_ventas = ingresosVentas; 
-    jornada.diferencia = fisico - esperado;
+    try {
+      const ahora = new Date();
+      const ingresosVentas = await this.ventasRepository.getSumVentasPagadas(jornada.apertura, ahora);
+      const esperado = Number(jornada.fondo_inicial) + ingresosVentas;
 
-    const jornadaCerrada = await this.jornadasRepository.update(jornada);
-    return { success: true, data: jornadaCerrada };
+      jornada.estatus = 'CERRADA';
+      jornada.cierre = ahora;
+      jornada.total_fisico = data.total_fisico;
+      jornada.total_ventas = ingresosVentas; 
+      jornada.diferencia = data.total_fisico - esperado;
+
+      const jornadaCerrada = await this.jornadasRepository.update(jornada);
+      return { success: true, data: jornadaCerrada };
+    } catch (error) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 
   async delete(id: number) {
     const jornada = await this.jornadasRepository.getById(id);
     if (!jornada) return { success: false, type: 'NOT_FOUND', message: 'Jornada no encontrada' };
-    if (jornada.estatus === 'CERRADA') return { success: false, type: 'BAD_REQUEST', message: 'No se puede eliminar una jornada ya cerrada' };
-    await this.jornadasRepository.delete(jornada);
-    return { success: true };
+    
+    if (jornada.estatus === 'CERRADA') {
+      return { success: false, type: 'CONFLICT', message: 'No se puede eliminar una jornada cerrada (Integridad contable)' };
+    }
+
+    try {
+      await this.jornadasRepository.delete(jornada);
+      return { success: true };
+    } catch (error) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 }
 

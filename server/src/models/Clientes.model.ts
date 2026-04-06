@@ -6,7 +6,7 @@ class Clientes {
   @PrimaryGeneratedColumn()
   declare id: number;
 
-  @Column()
+  @Column({ unique: true })
   declare cedula: string;
 
   @Column()

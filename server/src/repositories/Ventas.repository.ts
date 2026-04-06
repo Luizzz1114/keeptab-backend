@@ -33,7 +33,7 @@ class VentasRepository {
       cliente: data.cliente ?? undefined,
       detalles_venta: data.detalles as DetallesVentas[],
     });
-    return await this.repository.save(venta);
+    return await repo.save(venta);
   }
 
   async getAll(filtros?: { estatus?: string; fechaInicio?: Date; fechaFin?: Date }) {
@@ -59,7 +59,8 @@ class VentasRepository {
       relations: [
         'cliente', 
         'detalles_venta', 
-        'detalles_venta.producto'
+        'detalles_venta.producto',
+        'abonos'
       ] 
     });
   }

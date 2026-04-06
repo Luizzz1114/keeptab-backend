@@ -16,8 +16,13 @@ class ClientesController {
       });
     }
     try {
-      const cliente = await clientesService.create(valid.data);
-      return res.status(201).json({ message: 'Cliente registrado con éxito', cliente });
+      const resultado = await clientesService.create(valid.data);
+      if (!resultado.success) {
+        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : 400;
+        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
+        return res.status(statusCode).json({ message });
+      }
+      return res.status(201).json({ message: 'Cliente registrado con éxito', cliente: resultado.data });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -25,8 +30,14 @@ class ClientesController {
 
   static async getAll(req: Request, res: Response) {
     try {
-      const clientes = await clientesService.getAll();
-      return res.status(200).json(clientes);
+      const queryParams = {
+        cedula: req.query.cedula as string,
+      };
+      const resultado = await clientesService.getAll(queryParams);
+      if (!resultado.success) {
+        return res.status(400).json({ message: 'Error al obtener los clientes' });
+      }
+      return res.status(200).json(resultado.data);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -36,9 +47,11 @@ class ClientesController {
     const id = +req.params.id;
     if (isNaN(id)) return res.status(400).json({ message: 'ID de cliente inválido' });
     try {
-      const cliente = await clientesService.getById(id);
-      if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-      return res.status(200).json(cliente);
+      const resultado = await clientesService.getById(id);
+      if (!resultado.success) {
+        return res.status(404).json({ message: 'Cliente no encontrado' });
+      }
+      return res.status(200).json(resultado.data);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -72,8 +85,9 @@ class ClientesController {
     try {
       const resultado = await clientesService.update(id, valid.data);
       if (!resultado.success) {
-        const statusCode = resultado.type === 'NOT_FOUND' ? 404 : 400;
-        return res.status(statusCode).json({ message: resultado.message });
+        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : resultado.type === 'NOT_FOUND' ? 404 : 400;
+        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
+        return res.status(statusCode).json({ message });
       }
       return res.status(200).json({ message: 'Cliente actualizado con éxito', cliente: resultado.data });
     } catch (error: any) {
@@ -87,8 +101,9 @@ class ClientesController {
     try {
       const resultado = await clientesService.delete(id);
       if (!resultado.success) {
-        const statusCode = resultado.type === 'NOT_FOUND' ? 404 : 400;
-        return res.status(statusCode).json({ message: resultado.message });
+        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : resultado.type === 'NOT_FOUND' ? 404 : 400;
+        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
+        return res.status(statusCode).json({ message });
       }
       return res.status(200).json({ message: `Cliente eliminado con éxito` });
     } catch (error: any) {

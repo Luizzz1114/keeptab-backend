@@ -100,11 +100,13 @@ class VentasService {
   }
 
   async getById(id: number) {
-    return await this.ventasRepository.getById(id);
+    const venta = await this.ventasRepository.getById(id);
+    if (!venta) return { success: false, type: 'NOT_FOUND', message: 'Venta no encontrada' };
+    return { success: true, data: venta };
   }
 
   async delete(id: number) {
-    
+
     const venta = await this.ventasRepository.getById(id);
     if (!venta) {
       return { success: false, type: 'NOT_FOUND', message: `Venta con ID ${id} no encontrada` };

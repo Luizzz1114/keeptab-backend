@@ -24,6 +24,10 @@ class ClientesRepository {
     return await this.repository.findOneBy({ id });
   }
 
+  async getByCedula(cedula: string) {
+    return await this.repository.findOneBy({ cedula });
+  }
+
   async update(cliente: Clientes) {
     return await this.repository.save(cliente);
   }

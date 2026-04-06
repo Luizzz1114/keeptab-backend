@@ -18,7 +18,7 @@ class VentasController {
     try {
       const resultado = await ventasService.create(valid.data);
       if (!resultado.success) {
-        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'NOT_FOUND' ? 404 : 400;
+        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'NOT_FOUND' ? 404 : resultado.type === 'INSUFFICIENT_STOCK' ? 409 : 400;
         const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message
         return res.status(statusCode).json({ message });
       }
@@ -35,6 +35,9 @@ class VentasController {
         fecha: req.query.fecha as string,
       };
       const resultado = await ventasService.getAll(queryParams);
+      if (!resultado.success) {
+        return res.status(400).json({ message: 'Error al obtener las ventas' });
+      }
       return res.status(200).json(resultado.data);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
@@ -45,9 +48,12 @@ class VentasController {
     const id = +req.params.id;
     if (isNaN(id)) return res.status(400).json({ message: 'ID de venta inválido' });
     try {
-      const venta = await ventasService.getById(id);
-      if (!venta) return res.status(404).json({ message: 'Venta no encontrada' });
-      return res.status(200).json(venta);
+      const resultado = await ventasService.getById(id);
+      if (!resultado.success) {
+        const statusCode = resultado.type === 'NOT_FOUND' ? 404 : 400;
+        return res.status(statusCode).json({ message: resultado.message });
+      }
+      return res.status(200).json(resultado.data);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }

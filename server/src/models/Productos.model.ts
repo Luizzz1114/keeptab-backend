@@ -6,7 +6,7 @@ class Productos {
   @PrimaryGeneratedColumn()
   declare id: number;
 
-  @Column()
+  @Column({ unique: true })
   declare nombre: string;
 
   @Column('decimal', { precision: 10, scale: 2 })

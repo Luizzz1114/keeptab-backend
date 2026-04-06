@@ -5,7 +5,7 @@ const JornadasRouter: Router = Router();
 
 JornadasRouter.get('/', JornadasController.getAll);  
 JornadasRouter.post('/abrir', JornadasController.abrir);
-JornadasRouter.get('/actual', JornadasController.getActual);
+JornadasRouter.get('/actual', JornadasController.getEstadoActual);
 JornadasRouter.patch('/:id/cerrar', JornadasController.cerrar);
 
 JornadasRouter.route('/:id')

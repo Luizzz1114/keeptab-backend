@@ -13,7 +13,10 @@ class AbonosRepository {
 
   async create(data: CreateAbonoDTO, manager?: EntityManager) {
     const repo = manager ? manager.getRepository(Abonos) : this.repository;
-    const abono = repo.create(data);
+    const abono = repo.create({
+      monto: data.monto,
+      venta: { id: data.venta_id }
+    });
     return await repo.save(abono);
   }
 
@@ -24,7 +27,7 @@ class AbonosRepository {
   async getById(id: Abonos['id']) {
     return await this.repository.findOne({
       where: { id: id },
-      relations: ['venta']
+      relations: ['venta', 'venta.abonos']
     });
   }
 

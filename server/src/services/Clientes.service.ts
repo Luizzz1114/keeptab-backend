@@ -13,15 +13,30 @@ class ClientesService {
   }
 
   async create(data: CreateClienteDTO) {
-    return await this.clientesRepository.create(data);
+    const existe = await this.clientesRepository.getByCedula(data.cedula);
+    if (existe) return { success: false, type: 'CONFLICT', message: `La cédula ${data.cedula} ya está registrada` };
+    
+    try {
+      const cliente = await this.clientesRepository.create(data);
+      return { success: true, data: cliente };
+    } catch (error) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 
-  async getAll() {
-    return await this.clientesRepository.getAll();
+  async getAll(query: { cedula?: string; }) {
+    if (query.cedula) {
+      const cliente = await this.clientesRepository.getByCedula(query.cedula);
+      return { success: true, data: cliente ? [cliente] : [] };
+    }
+    const clientes = await this.clientesRepository.getAll();
+    return { success: true, data: clientes };
   }
 
   async getById(id: number) {
-    return await this.clientesRepository.getById(id);
+    const cliente = await this.clientesRepository.getById(id);
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    return { success: true, data: cliente };
   }
 
   async getDeudas(id: number) {
@@ -34,16 +49,31 @@ class ClientesService {
   async update(id: number, data: UpdateClienteDTO) {
     const cliente = await this.clientesRepository.getById(id);
     if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
-    Object.assign(cliente, data);
-    await this.clientesRepository.update(cliente);
-    return { success: true, data: cliente };
+    
+    if (data.cedula && data.cedula !== cliente.cedula) {
+      const existe = await this.clientesRepository.getByCedula(data.cedula);
+      if (existe) return { success: false, type: 'CONFLICT', message: `La cédula ${data.cedula} ya está en uso` };
+    }
+
+    try {
+      Object.assign(cliente, data);
+      await this.clientesRepository.update(cliente);
+      return { success: true, data: cliente };
+    } catch (error) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 
   async delete(id: number) {
     const cliente = await this.clientesRepository.getById(id);
     if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
-    await this.clientesRepository.delete(cliente);
-    return { success: true };
+    
+    try {
+      await this.clientesRepository.delete(cliente);
+      return { success: true };
+    } catch (error) {
+      return { success: false, type: 'CONFLICT', message: 'No se puede eliminar un cliente con ventas asociadas' };
+    }
   }
 
 }

@@ -24,13 +24,17 @@ class ProductosRepository {
     return await this.repository.findOneBy({ id });
   }
 
+  async getByNombre(nombre: string) {
+    return await this.repository.findOneBy({ nombre });
+  }
+
   async update(producto: Productos, manager?: EntityManager) {
     const repo = manager ? manager.getRepository(Productos) : this.repository;
     return await repo.save(producto);
   }
 
   async delete(producto: Productos) {
-    return await this.repository.softDelete(producto);
+    return await this.repository.softRemove(producto);
   }
   
 }
