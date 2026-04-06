@@ -1,15 +1,16 @@
 import { Router } from 'express';
+import { authenticate } from '../middlewares/Auth.middleware';
 import ProductosController from '../controllers/Productos.controller';
 
 const ProductosRouter: Router = Router();
 
 ProductosRouter.route('/')
-  .get(ProductosController.getAll)
-  .post(ProductosController.create);  
+  .get(authenticate, ProductosController.getAll)
+  .post(authenticate, ProductosController.create);  
 
 ProductosRouter.route('/:id')
-  .get(ProductosController.getById)
-  .patch(ProductosController.update)
-  .delete(ProductosController.delete);
+  .get(authenticate, ProductosController.getById)
+  .patch(authenticate, ProductosController.update)
+  .delete(authenticate, ProductosController.delete);
 
 export default ProductosRouter;

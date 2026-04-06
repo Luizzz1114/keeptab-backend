@@ -32,13 +32,13 @@ class ProductosService {
 
   async getById(id: number) {
     const producto = await this.repository.getById(id);
-    if (!producto) return { success: false, type: 'NOT_FOUND', message: `Producto no encontrado` };
+    if (!producto) return { success: false, type: 'NOT_FOUND', message: 'Producto no encontrado' };
     return { success: true, data: producto };
   }
 
   async update(id: number, data: UpdateProductoDTO) {
     const producto = await this.repository.getById(id);
-    if (!producto) return { success: false, type: 'NOT_FOUND', message: `Producto no encontrado` };
+    if (!producto) return { success: false, type: 'NOT_FOUND', message: 'Producto no encontrado' };
     
     if (data.nombre && data.nombre !== producto.nombre) {
       const existe = await this.repository.getByNombre(data.nombre);
@@ -56,7 +56,7 @@ class ProductosService {
 
   async delete(id: number) {
     const producto = await this.repository.getById(id);
-    if (!producto) return { success: false, type: 'NOT_FOUND', message: `Producto no encontrado` };
+    if (!producto) return { success: false, type: 'NOT_FOUND', message: 'Producto no encontrado' };
     
     try {
       await this.repository.delete(producto);

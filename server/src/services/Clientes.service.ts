@@ -35,20 +35,20 @@ class ClientesService {
 
   async getById(id: number) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: 'Cliente no encontrado' };
     return { success: true, data: cliente };
   }
 
   async getDeudas(id: number) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: 'Cliente no encontrado' };
     const deudas = await this.ventasRepository.getDeudasByCliente(id);
     return { success: true, data: deudas };
   }
 
   async update(id: number, data: UpdateClienteDTO) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: 'Cliente no encontrado' };
     
     if (data.cedula && data.cedula !== cliente.cedula) {
       const existe = await this.clientesRepository.getByCedula(data.cedula);
@@ -66,7 +66,7 @@ class ClientesService {
 
   async delete(id: number) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: 'Cliente no encontrado' };
     
     try {
       await this.clientesRepository.delete(cliente);

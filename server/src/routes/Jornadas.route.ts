@@ -1,15 +1,16 @@
 import { Router } from 'express';
+import { authenticate } from '../middlewares/Auth.middleware';
 import JornadasController from '../controllers/Jornadas.controller';
 
 const JornadasRouter: Router = Router();
 
-JornadasRouter.get('/', JornadasController.getAll);  
-JornadasRouter.post('/abrir', JornadasController.abrir);
-JornadasRouter.get('/actual', JornadasController.getEstadoActual);
-JornadasRouter.patch('/:id/cerrar', JornadasController.cerrar);
+JornadasRouter.get('/', authenticate, JornadasController.getAll);  
+JornadasRouter.post('/abrir', authenticate, JornadasController.abrir);
+JornadasRouter.get('/actual', authenticate, JornadasController.getEstadoActual);
+JornadasRouter.patch('/:id/cerrar', authenticate, JornadasController.cerrar);
 
 JornadasRouter.route('/:id')
-  .get(JornadasController.getById)
-  .delete(JornadasController.delete);
+  .get(authenticate, JornadasController.getById)
+  .delete(authenticate, JornadasController.delete);
 
 export default JornadasRouter;

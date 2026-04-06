@@ -1,14 +1,15 @@
 import { Router } from 'express';
+import { authenticate } from '../middlewares/Auth.middleware';
 import AbonosController from '../controllers/Abonos.controller';
 
 const AbonosRouter: Router = Router();
 
 AbonosRouter.route('/')
-  .get(AbonosController.getAll)
-  .post(AbonosController.create);  
+  .get(authenticate, AbonosController.getAll)
+  .post(authenticate, AbonosController.create);  
 
 AbonosRouter.route('/:id')
-  .get(AbonosController.getById)
-  .delete(AbonosController.delete);
+  .get(authenticate, AbonosController.getById)
+  .delete(authenticate, AbonosController.delete);
 
 export default AbonosRouter;

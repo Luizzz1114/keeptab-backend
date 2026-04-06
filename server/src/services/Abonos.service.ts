@@ -52,13 +52,13 @@ class AbonosService {
 
   async getById(id: number) {
     const abono = await this.abonosRepository.getById(id);
-    if (!abono) return { success: false, type: 'NOT_FOUND', message: `Abono no encontrado` }; 
+    if (!abono) return { success: false, type: 'NOT_FOUND', message: 'Abono no encontrado' }; 
     return { success: true, data: abono };
   }
 
   async delete(id: number) {
     const abono = await this.abonosRepository.getById(id);
-    if (!abono) return { success: false, type: 'NOT_FOUND', message: `Abono no encontrado` };
+    if (!abono) return { success: false, type: 'NOT_FOUND', message: 'Abono no encontrado' };
 
     const abonosActuales = abono.venta.abonos || [];
     const abonosRestantes = abonosActuales.filter(a => a.id !== abono.id);
