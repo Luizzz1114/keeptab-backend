@@ -220,8 +220,6 @@ El sistema cuenta con las siguientes entidades:
 | `id` | SERIAL | Identificador único |
 | `cedula` | VARCHAR | Cédula de identidad |
 | `nombre` | VARCHAR | Nombre completo |
-| `telefono` | VARCHAR | Teléfono de contacto |
-| `direccion` | TEXT | Dirección de entrega |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 | `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
@@ -278,7 +276,7 @@ El sistema cuenta con las siguientes entidades:
 | `username` | VARCHAR | Nombre de usuario único |
 | `nombre` | VARCHAR | Nombre completo |
 | `passwordHash` | VARCHAR | Hash de contraseña |
-| `refreshToken` | VARCHAR | Token de刷新 (opcional) |
+| `refreshToken` | VARCHAR | Refresh Token (opcional) |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 | `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
