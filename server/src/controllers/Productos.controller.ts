@@ -17,18 +17,18 @@ class ProductosController {
     }
     try {
       const producto = await productosService.create(valid.data);
-      res.status(201).json({ message: 'Producto registrado con éxito', producto });
+      return res.status(201).json({ message: 'Producto registrado con éxito', producto });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
   static async getAll(req: Request, res: Response) {
     try {
       const productos = await productosService.getAll();
-      res.status(200).json(productos);
+      return res.status(200).json(productos);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -38,9 +38,9 @@ class ProductosController {
     try {
       const producto = await productosService.getById(id);
       if (!producto) return res.status(404).json({ message: 'Producto no encontrado' });
-      res.status(200).json(producto);
+      return res.status(200).json(producto);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -57,9 +57,9 @@ class ProductosController {
     try {
       const producto = await productosService.update(id, valid.data);
       if (!producto) return res.status(404).json({ message: 'Producto no encontrado' });
-      res.json({ message: 'Producto actualizado con éxito', producto });
+      return res.status(200).json({ message: 'Producto actualizado con éxito', producto });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -69,9 +69,9 @@ class ProductosController {
     try {
       const producto = await productosService.delete(id);
       if (!producto) return res.status(404).json({ message: 'Producto no encontrado' });
-      res.status(200).json({ message: `Producto eliminado con éxito` });
+      return res.status(200).json({ message: `Producto eliminado con éxito` });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 

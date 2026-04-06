@@ -18,5 +18,5 @@ export const createProductoSchema = z.object({
 
 export const updateProductoSchema = createProductoSchema.partial();
 
-export type UpdateProductoDTO = z.infer<typeof updateProductoSchema>;
 export type CreateProductoDTO = z.infer<typeof createProductoSchema>;
+export type UpdateProductoDTO = z.infer<typeof updateProductoSchema>;

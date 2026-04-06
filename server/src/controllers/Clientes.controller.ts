@@ -17,18 +17,18 @@ class ClientesController {
     }
     try {
       const cliente = await clientesService.create(valid.data);
-      res.status(201).json({ message: 'Cliente registrado con éxito', cliente });
+      return res.status(201).json({ message: 'Cliente registrado con éxito', cliente });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
   static async getAll(req: Request, res: Response) {
     try {
       const clientes = await clientesService.getAll();
-      res.status(200).json(clientes);
+      return res.status(200).json(clientes);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -38,7 +38,7 @@ class ClientesController {
     try {
       const cliente = await clientesService.getById(id);
       if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-      res.status(200).json(cliente);
+      return res.status(200).json(cliente);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -50,9 +50,9 @@ class ClientesController {
     try {
       const deudas = await clientesService.getDeudas(id);
       if (!deudas) return res.status(404).json({ message: 'Cliente no encontrado' });
-      res.status(200).json(deudas);
+      return res.status(200).json(deudas);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -69,7 +69,7 @@ class ClientesController {
     try {
       const cliente = await clientesService.update(id, valid.data);
       if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-      res.json({ message: 'Cliente actualizado con éxito', cliente });
+      return res.status(200).json({ message: 'Cliente actualizado con éxito', cliente });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -81,7 +81,7 @@ class ClientesController {
     try {
       const cliente = await clientesService.delete(id);
       if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-      res.status(200).json({ message: `Cliente eliminado con éxito` });
+      return res.status(200).json({ message: `Cliente eliminado con éxito` });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }

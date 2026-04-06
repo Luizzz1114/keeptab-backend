@@ -3,35 +3,35 @@ import ProductosRepository from '../repositories/Productos.repository';
 
 class ProductosService {
 
-  private reposity: ProductosRepository;
+  private repository: ProductosRepository;
 
   constructor() {
-    this.reposity = new ProductosRepository();
+    this.repository = new ProductosRepository();
   }
 
   async create(data: CreateProductoDTO) {
-    return await this.reposity.create(data);
+    return await this.repository.create(data);
   }
 
   async getAll() {
-    return await this.reposity.getAll();
+    return await this.repository.getAll();
   }
 
   async getById(id: number) {
-    return await this.reposity.getById(id);
+    return await this.repository.getById(id);
   }
 
   async update(id: number, data: UpdateProductoDTO) {
     const producto = await this.getById(id);
     if (!producto) return null;
     Object.assign(producto, data);
-    return await this.reposity.update(producto);
+    return await this.repository.update(producto);
   }
 
   async delete(id: number) {
     const producto = await this.getById(id);
     if (!producto) return null;
-    return await this.reposity.delete(producto);
+    return await this.repository.delete(producto);
   }
 
 }

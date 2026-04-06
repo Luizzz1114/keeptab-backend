@@ -5,7 +5,7 @@ import Productos from '../models/Productos.model';
 
 class ProductosRepository {
 
-  private repository: Repository<Productos>
+  private repository: Repository<Productos>;
 
   constructor() {
     this.repository = AppDataSource.getRepository(Productos);

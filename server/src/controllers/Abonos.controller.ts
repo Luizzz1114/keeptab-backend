@@ -22,18 +22,18 @@ class AbonosController {
         const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message
         return res.status(statusCode).json({ message });
       }
-      res.status(201).json({ message: 'Abono registrado con éxito', abono: resultado.data });
+      return res.status(201).json({ message: 'Abono registrado con éxito', abono: resultado.data });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
   static async getAll(req: Request, res: Response) {
     try {
       const abonos = await abonosService.getAll();
-      res.status(200).json(abonos);
+      return res.status(200).json(abonos);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -43,7 +43,7 @@ class AbonosController {
     try {
       const abono = await abonosService.getById(id);
       if (!abono) return res.status(404).json({ message: 'Abono no encontrado' });
-      res.status(200).json(abono);
+      return res.status(200).json(abono);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -59,7 +59,7 @@ class AbonosController {
         const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
         return res.status(statusCode).json({ message });
       }
-      res.status(200).json({ message: `Abono eliminado con éxito y deuda restaurada` });
+      return res.status(200).json({ message: `Abono eliminado con éxito y deuda restaurada` });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
