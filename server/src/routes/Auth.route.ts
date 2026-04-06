@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { loginLimiter } from '../middlewares/Limiter.middleware';
-import { authenticate } from '../middlewares/Auth.middleware';
+import { loginLimiter } from '../middlewares/limiter.middleware';
+import { authenticate } from '../middlewares/auth.middleware';
 import AuthController from '../controllers/Auth.controller';
 
 const AuthRouter: Router = Router();

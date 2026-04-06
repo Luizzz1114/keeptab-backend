@@ -90,7 +90,7 @@ class UsuariosController {
         const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
         return res.status(statusCode).json({ message });
       }
-      return res.status(200).json({ message: `Usuario eliminado con éxito` });
+      return res.status(200).json({ message: 'Usuario eliminado con éxito' });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }

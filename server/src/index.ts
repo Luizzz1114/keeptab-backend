@@ -9,7 +9,7 @@ async function main() {
   try {
     await AppDataSource.initialize();
     console.log('➜ Conexión a la base de datos establecida');
-  } catch (error) {
+  } catch (error: any) {
     console.error('➜ Error al conectar a la base de datos:', error.message);
   }
   app.listen(PORT, () => {

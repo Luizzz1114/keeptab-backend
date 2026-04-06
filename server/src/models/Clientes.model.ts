@@ -13,7 +13,7 @@ class Clientes {
   declare nombre: string;
 
   @Column({ nullable: true })
-  declare contacto: string;
+  declare contacto: string | null;
 
   @OneToMany(() => Ventas, (venta) => venta.cliente)
   declare ventas: Ventas[];

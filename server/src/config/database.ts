@@ -6,6 +6,7 @@ import Ventas from '../models/Ventas.model';
 import DetallesVentas from '../models/Detalles.ventas.model';
 import Abonos from '../models/Abonos.model';
 import Jornadas from '../models/Jornadas.model';
+import Usuarios from '../models/Usuarios.model';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -15,6 +16,6 @@ export const AppDataSource = new DataSource({
   password: process.env.PG_PASSWORD,
   database: process.env.PG_DATABASE,
   logging: true,
-  entities: [Productos, Clientes, Ventas, DetallesVentas, Abonos, Jornadas],
+  entities: [Productos, Clientes, Ventas, DetallesVentas, Abonos, Jornadas, Usuarios],
   synchronize: false
 });

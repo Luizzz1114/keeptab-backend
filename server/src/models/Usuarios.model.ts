@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('usuarios')
-class Usuario {
+class Usuarios {
   @PrimaryGeneratedColumn()
   declare id: number;
 
@@ -27,4 +27,4 @@ class Usuario {
   declare deleted_at: Date;
 }
 
-export default Usuario;
+export default Usuarios;

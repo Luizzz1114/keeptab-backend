@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import router from './routes';
-import { generalLimiter } from './middlewares/Limiter.middleware';
+import { generalLimiter } from './middlewares/limiter.middleware';
 
 const app: Application = express();
 
