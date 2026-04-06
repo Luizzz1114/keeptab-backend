@@ -3,13 +3,13 @@ import JornadasController from '../controllers/Jornadas.controller';
 
 const JornadasRouter: Router = Router();
 
-JornadasRouter.route('/')
-  .get(JornadasController.getAll)
-  .post(JornadasController.abrir);  
+JornadasRouter.get('/', JornadasController.getAll);  
+JornadasRouter.post('/abrir', JornadasController.abrir);
+JornadasRouter.get('/actual', JornadasController.getActual);
+JornadasRouter.patch('/:id/cerrar', JornadasController.cerrar);
 
 JornadasRouter.route('/:id')
   .get(JornadasController.getById)
-  .patch(JornadasController.cerrar)
   .delete(JornadasController.delete);
 
 export default JornadasRouter;

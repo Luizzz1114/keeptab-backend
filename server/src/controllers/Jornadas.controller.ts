@@ -47,6 +47,16 @@ class JornadasController {
     }
   }
 
+  static async getActual(req: Request, res: Response) {
+    try {
+      const resultado = await jornadaService.getEstadoActual();
+      if (!resultado.success) return res.status(404).json({ message: resultado.message });
+      res.status(200).json({ jornada: resultado.data });
+    } catch (error: any) {
+      res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  }
+
   static async cerrar(req: Request, res: Response) {
     const id = +req.params.id;
     if (isNaN(id)) return res.status(400).json({ message: 'ID de jornada inválido' });
