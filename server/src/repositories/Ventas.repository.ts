@@ -42,7 +42,7 @@ class VentasRepository {
       where.estatus = filtros.estatus;
     }
     if (filtros?.fechaInicio && filtros?.fechaFin) {
-      where.created_at = Between(filtros.fechaInicio, filtros.fechaFin);
+      where.fecha = Between(filtros.fechaInicio, filtros.fechaFin);
     }
     return await this.repository.find({
       where,

@@ -23,8 +23,10 @@ class AbonosService {
     const sumaAnteriores = abonosAnteriores.reduce((acumulado, abono) => acumulado + Number(abono.monto), 0);
     const totalPagado = sumaAnteriores + Number(data.monto);
 
+    const totalVenta = Number(venta.total);
     let estatus_venta: string = 'FIADA';
-    if (totalPagado >= Number(venta.total)) {
+    
+    if (totalVenta > 0 && totalPagado >= totalVenta) {
       estatus_venta = 'PAGADA';
     }
     

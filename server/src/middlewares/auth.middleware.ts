@@ -17,7 +17,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
   }
   const token = bearer.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET || 'secreto_access') as { id: number, username: string };
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string) as { id: number, username: string };
     if(typeof decoded === 'object' && decoded.username) {
       const usuarioRepository = new UsuariosRepository();
       const usuario = await usuarioRepository.getByUsername(decoded.username);
