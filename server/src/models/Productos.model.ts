@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import DetallesVentas from './Detalles.ventas.model';
+import DetallesVenta from './Detalles_venta.model';
 
 @Entity()
 class Productos {
@@ -18,8 +18,8 @@ class Productos {
   @Column({ default: 0 })
   declare stock: number;
 
-  @OneToMany(() => DetallesVentas, (detalle) => detalle.producto)
-  declare detalles_venta: DetallesVentas[];
+  @OneToMany(() => DetallesVenta, (detalle) => detalle.producto)
+  declare detalles_venta: DetallesVenta[];
 
   @CreateDateColumn()
   declare created_at: Date;

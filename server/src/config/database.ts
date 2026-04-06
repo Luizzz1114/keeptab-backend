@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import Productos from '../models/Productos.model';
 import Clientes from '../models/Clientes.model';
 import Ventas from '../models/Ventas.model';
-import DetallesVentas from '../models/Detalles.ventas.model';
+import DetallesVenta from '../models/Detalles_venta.model';
 import Abonos from '../models/Abonos.model';
 import Jornadas from '../models/Jornadas.model';
 import Usuarios from '../models/Usuarios.model';
@@ -16,6 +16,6 @@ export const AppDataSource = new DataSource({
   password: process.env.PG_PASSWORD,
   database: process.env.PG_DATABASE,
   logging: true,
-  entities: [Productos, Clientes, Ventas, DetallesVentas, Abonos, Jornadas, Usuarios],
+  entities: [Productos, Clientes, Ventas, DetallesVenta, Abonos, Jornadas, Usuarios],
   synchronize: false
 });

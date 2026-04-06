@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import Clientes from './Clientes.model';
-import DetallesVentas from './Detalles.ventas.model';
+import DetallesVenta from './Detalles_venta.model';
 import Abonos from './Abonos.model';
 
 @Entity()
@@ -21,8 +21,8 @@ class Ventas {
   @JoinColumn({ name: 'cliente_id' })
   declare cliente: Clientes;
 
-  @OneToMany(() => DetallesVentas, (detalle) => detalle.venta, { cascade: true })
-  declare detalles_venta: DetallesVentas[];
+  @OneToMany(() => DetallesVenta, (detalle) => detalle.venta, { cascade: true })
+  declare detalles_venta: DetallesVenta[];
 
   @OneToMany(() => Abonos, (abono) => abono.venta)
   declare abonos: Abonos[];

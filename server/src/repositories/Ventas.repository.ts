@@ -1,7 +1,7 @@
 import { EntityManager, Repository, Between, FindOptionsWhere } from 'typeorm';
 import { AppDataSource } from '../config/database';
 import Ventas from '../models/Ventas.model';
-import DetallesVentas from '../models/Detalles.ventas.model';
+import DetallesVenta from '../models/Detalles_venta.model';
 
 export interface DetalleVentaInput {
   cantidad: number;
@@ -31,7 +31,7 @@ class VentasRepository {
       total: data.total,
       estatus: data.estatus,
       cliente: data.cliente ?? undefined,
-      detalles_venta: data.detalles as DetallesVentas[],
+      detalles_venta: data.detalles as DetallesVenta[],
     });
     return await repo.save(venta);
   }

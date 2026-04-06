@@ -3,7 +3,7 @@ import Ventas from './Ventas.model';
 import Productos from './Productos.model';
 
 @Entity()
-class DetallesVentas {
+class DetallesVenta {
   @PrimaryGeneratedColumn()
   declare id: number;
 
@@ -31,4 +31,4 @@ class DetallesVentas {
   declare updated_at: Date;
 }
 
-export default DetallesVentas;
+export default DetallesVenta;
