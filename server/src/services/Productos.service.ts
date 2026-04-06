@@ -23,15 +23,17 @@ class ProductosService {
 
   async update(id: number, data: UpdateProductoDTO) {
     const producto = await this.getById(id);
-    if (!producto) return null;
+    if (!producto) return { success: false, type: 'NOT_FOUND', message: `Producto no encontrado` };
     Object.assign(producto, data);
-    return await this.repository.update(producto);
+    await this.repository.update(producto);
+    return { success: true, data: producto };
   }
 
   async delete(id: number) {
     const producto = await this.getById(id);
-    if (!producto) return null;
-    return await this.repository.delete(producto);
+    if (!producto) return { success: false, type: 'NOT_FOUND', message: `Producto no encontrado` };
+    await this.repository.delete(producto);
+    return { success: true };
   }
 
 }

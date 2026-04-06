@@ -48,9 +48,12 @@ class ClientesController {
     const id = +req.params.id;
     if (isNaN(id)) return res.status(400).json({ message: 'ID de cliente inválido' });
     try {
-      const deudas = await clientesService.getDeudas(id);
-      if (!deudas) return res.status(404).json({ message: 'Cliente no encontrado' });
-      return res.status(200).json(deudas);
+      const resultado = await clientesService.getDeudas(id);
+      if (!resultado.success) {
+        const statusCode = resultado.type === 'NOT_FOUND' ? 404 : 400;
+        return res.status(statusCode).json({ message: resultado.message });
+      }
+      return res.status(200).json(resultado.data);
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -67,9 +70,12 @@ class ClientesController {
       });
     }
     try {
-      const cliente = await clientesService.update(id, valid.data);
-      if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-      return res.status(200).json({ message: 'Cliente actualizado con éxito', cliente });
+      const resultado = await clientesService.update(id, valid.data);
+      if (!resultado.success) {
+        const statusCode = resultado.type === 'NOT_FOUND' ? 404 : 400;
+        return res.status(statusCode).json({ message: resultado.message });
+      }
+      return res.status(200).json({ message: 'Cliente actualizado con éxito', cliente: resultado.data });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
@@ -79,8 +85,11 @@ class ClientesController {
     const id = +req.params.id;
     if (isNaN(id)) return res.status(400).json({ message: 'ID de cliente inválido' });
     try {
-      const cliente = await clientesService.delete(id);
-      if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
+      const resultado = await clientesService.delete(id);
+      if (!resultado.success) {
+        const statusCode = resultado.type === 'NOT_FOUND' ? 404 : 400;
+        return res.status(statusCode).json({ message: resultado.message });
+      }
       return res.status(200).json({ message: `Cliente eliminado con éxito` });
     } catch (error: any) {
       return res.status(500).json({ message: 'Error interno del servidor' });

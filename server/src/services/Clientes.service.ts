@@ -26,21 +26,24 @@ class ClientesService {
 
   async getDeudas(id: number) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return null;
-    return await this.ventasRepository.getDeudasByCliente(id);
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    const deudas = await this.ventasRepository.getDeudasByCliente(id);
+    return { success: true, data: deudas };
   }
 
   async update(id: number, data: UpdateClienteDTO) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return null;
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
     Object.assign(cliente, data);
-    return await this.clientesRepository.update(cliente);
+    await this.clientesRepository.update(cliente);
+    return { success: true, data: cliente };
   }
 
   async delete(id: number) {
     const cliente = await this.clientesRepository.getById(id);
-    if (!cliente) return null;
-    return await this.clientesRepository.delete(cliente);
+    if (!cliente) return { success: false, type: 'NOT_FOUND', message: `Cliente no encontrado` };
+    await this.clientesRepository.delete(cliente);
+    return { success: true };
   }
 
 }

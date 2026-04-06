@@ -16,10 +16,8 @@ class AbonosService {
   async create(data: CreateAbonoDTO) {
 
     const venta = await this.ventasRepository.getById(data.venta_id);
-    if(!venta) {
-      return { success: false, type: 'NOT_FOUND', message: `Venta con ID ${data.venta_id} no encontrada` };
-    };
-  
+    if(!venta) return { success: false, type: 'NOT_FOUND', message: `Venta con ID ${data.venta_id} no encontrada` };
+    
     let estatus_venta: string = 'FIADA'
     if (data.monto >= venta.total) estatus_venta = 'PAGADA';
     
@@ -50,9 +48,7 @@ class AbonosService {
 
   async delete(id: number) {
     const abono = await this.abonosRepository.getById(id);
-    if (!abono) {
-      return { success: false, type: 'NOT_FOUND', message: `Abono con ID ${id} no encontrado` };
-    }
+    if (!abono) return { success: false, type: 'NOT_FOUND', message: `Abono no encontrado` };
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
