@@ -78,14 +78,14 @@ KeepTab/
 ├── server/                      # Backend — Express 5 + TypeORM + PostgreSQL
 │   ├── src/
 │   │   ├── config/              # Conexión a la base de datos
-│   │   ├── controllers/        # Controladores HTTP (1 por entidad)
+│   │   ├── controllers/         # Controladores HTTP (1 por entidad)
 │   │   ├── middlewares/         # Capa de seguridad (JWT, rate limiting)
-│   │   ├── models/             # Entidades de TypeORM
-│   │   ├── repositories/       # Capa de acceso a datos
-│   │   ├── routes/             # Definición de rutas Express
-│   │   ├── schemas/            # DTOs con Zod
-│   │   ├── services/           # Lógica de negocio
-│   │   └── index.ts           # Punto de entrada
+│   │   ├── models/              # Entidades de TypeORM
+│   │   ├── repositories/        # Capa de acceso a datos
+│   │   ├── routes/              # Definición de rutas Express
+│   │   ├── schemas/             # DTOs con Zod
+│   │   ├── services/            # Lógica de negocio
+│   │   └── index.ts             # Punto de entrada
 │   ├── package.json
 │   └── tsconfig.json
 │
@@ -237,13 +237,13 @@ El sistema cuenta con las siguientes entidades:
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 
-### 4. DetallesVentas
+### 4. DetallesVenta
 
 | Campo | Tipo | Descripción |
 |---|---|---|
 | `id` | SERIAL | Identificador único |
 | `cantidad` | INTEGER | Cantidad del producto |
-| `precio` | DECIMAL(10,2) | Precio unitario |
+| `precio_unitario` | DECIMAL(10,2) | Precio unitario |
 | `venta_id` | INTEGER | FK → Ventas |
 | `producto_id` | INTEGER | FK → Productos |
 
@@ -316,6 +316,7 @@ El sistema cuenta con las siguientes entidades:
 |---|---|---|---|
 | `GET` | `/clientes` | Listar todos los clientes | Sí |
 | `GET` | `/clientes/:id` | Obtener cliente por ID | Sí |
+| `GET` | `/clientes/:id/deudas` | Obtener deudas de un cliente | Sí |
 | `POST` | `/clientes` | Crear nuevo cliente | Sí |
 | `PATCH` | `/clientes/:id` | Actualizar cliente | Sí |
 | `DELETE` | `/clientes/:id` | Eliminar cliente | Sí |
@@ -327,7 +328,6 @@ El sistema cuenta con las siguientes entidades:
 | `GET` | `/ventas` | Listar todas las ventas | Sí |
 | `GET` | `/ventas/:id` | Obtener venta por ID | Sí |
 | `POST` | `/ventas` | Crear nueva venta | Sí |
-| `PATCH` | `/ventas/:id` | Actualizar venta | Sí |
 | `DELETE` | `/ventas/:id` | Eliminar venta | Sí |
 
 ### Abonos (`/abonos`)
@@ -337,15 +337,18 @@ El sistema cuenta con las siguientes entidades:
 | `GET` | `/abonos` | Listar todos los abonos | Sí |
 | `GET` | `/abonos/:id` | Obtener abono por ID | Sí |
 | `POST` | `/abonos` | Registrar abono | Sí |
+| `DELETE` | `/abonos/:id` | Eliminar abono | Sí |
 
 ### Jornadas (`/jornadas`)
 
 | Método | Ruta | Descripción | Autenticación |
 |---|---|---|---|
 | `GET` | `/jornadas` | Listar todas las jornadas | Sí |
+| `GET` | `/jornadas/actual` | Obtener jornada actual | Sí |
 | `GET` | `/jornadas/:id` | Obtener jornada por ID | Sí |
-| `POST` | `/jornadas` | Registrar jornada | Sí |
-| `PATCH` | `/jornadas/:id` | Actualizar jornada | Sí |
+| `POST` | `/jornadas/abrir` | Registrar y abrir jornada | Sí |
+| `PATCH` | `/jornadas/:id/cerrar` | Cerrar jornada | Sí |
+| `DELETE` | `/jornadas/:id` | Eliminar jornada | Sí |
 
 ### Usuarios (`/usuarios`)
 
@@ -357,9 +360,6 @@ El sistema cuenta con las siguientes entidades:
 | `PATCH` | `/usuarios/:id` | Actualizar usuario | Sí |
 | `DELETE` | `/usuarios/:id` | Eliminar usuario | Sí |
 
-
-
-
 ## Autenticación
 
 Todos los endpoints (excepto `/auth/login`) requieren el header de autorización:
@@ -369,6 +369,9 @@ Authorization: Bearer <access_token>
 ```
 
 El **access token** expira en **15 minutos**. Usa el **refresh token** para obtener uno nuevo mediante el endpoint `/auth/refresh`.
+
+
+
 
 ### Flujo de autenticación
 
