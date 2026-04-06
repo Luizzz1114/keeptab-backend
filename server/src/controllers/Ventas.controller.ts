@@ -24,7 +24,7 @@ class VentasController {
       }
       res.status(201).json({ message: 'Venta registrada con éxito', venta: resultado.data });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -35,9 +35,9 @@ class VentasController {
         fecha: req.query.fecha as string,
       };
       const resultado = await ventasService.getAll(queryParams);
-      res.status(200).json(resultado.data);
+      return res.status(200).json(resultado.data);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -46,10 +46,10 @@ class VentasController {
     if (isNaN(id)) return res.status(400).json({ message: 'ID de venta inválido' });
     try {
       const venta = await ventasService.getById(id);
-      if (!venta) return res.status(404).json({ message: 'Venta no encontrada' })
-      res.status(200).json(venta);
+      if (!venta) return res.status(404).json({ message: 'Venta no encontrada' });
+      return res.status(200).json(venta);
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -63,9 +63,9 @@ class VentasController {
         const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
         return res.status(statusCode).json({ message });
       }
-      res.status(200).json({ message: `Venta anulada con éxito y stock devuelto` });
+      return res.status(200).json({ message: 'Venta anulada con éxito y stock devuelto' });
     } catch (error: any) {
-      res.status(500).json({ message: 'Error interno del servidor' });
+      return res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 

@@ -18,11 +18,11 @@ class Clientes {
   @OneToMany(() => Ventas, (venta) => venta.cliente)
   declare ventas: Ventas[];
 
-  @CreateDateColumn({ name: 'created_at' })
-  declare createdAt: Date;
+  @CreateDateColumn()
+  declare created_at: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
-  declare updatedAt: Date;
+  @UpdateDateColumn()
+  declare updated_at: Date;
 }
 
 export default Clientes;

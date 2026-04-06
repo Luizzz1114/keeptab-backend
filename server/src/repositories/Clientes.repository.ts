@@ -5,7 +5,7 @@ import Clientes from '../models/Clientes.model';
 
 class ClientesRepository {
 
-  private repository: Repository<Clientes>
+  private repository: Repository<Clientes>;
 
   constructor() {
     this.repository = AppDataSource.getRepository(Clientes);

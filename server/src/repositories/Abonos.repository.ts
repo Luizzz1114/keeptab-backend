@@ -5,7 +5,7 @@ import Abonos from '../models/Abonos.model';
 
 class AbonosRepository {
 
-  private repository: Repository<Abonos>
+  private repository: Repository<Abonos>;
 
   constructor() {
     this.repository = AppDataSource.getRepository(Abonos);
