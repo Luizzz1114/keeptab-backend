@@ -24,11 +24,6 @@ class DetallesVenta {
   @JoinColumn({ name: 'producto_id' })
   declare producto: Productos;
 
-  @CreateDateColumn()
-  declare created_at: Date;
-
-  @UpdateDateColumn()
-  declare updated_at: Date;
 }
 
 export default DetallesVenta;

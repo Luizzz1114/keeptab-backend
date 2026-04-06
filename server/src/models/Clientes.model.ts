@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import Ventas from './Ventas.model';
 
 @Entity()
@@ -23,6 +23,10 @@ class Clientes {
 
   @UpdateDateColumn()
   declare updated_at: Date;
+
+  @DeleteDateColumn()
+  declare deleted_at: Date;
+  
 }
 
 export default Clientes;

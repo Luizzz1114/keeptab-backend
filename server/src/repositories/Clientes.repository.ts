@@ -33,7 +33,7 @@ class ClientesRepository {
   }
 
   async delete(cliente: Clientes) {
-    return await this.repository.remove(cliente);
+    return await this.repository.softRemove(cliente);
   }
   
 }

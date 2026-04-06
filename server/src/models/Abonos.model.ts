@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Ventas from './Ventas.model';
 
 @Entity()
@@ -19,8 +19,6 @@ class Abonos {
   @CreateDateColumn()
   declare created_at: Date;
 
-  @UpdateDateColumn()
-  declare updated_at: Date;
 }
 
 export default Abonos;
