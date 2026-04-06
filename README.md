@@ -220,6 +220,7 @@ El sistema cuenta con las siguientes entidades:
 | `id` | SERIAL | Identificador único |
 | `cedula` | VARCHAR | Cédula de identidad |
 | `nombre` | VARCHAR | Nombre completo |
+| `contacto` | VARCHAR | Número de teléfono |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 | `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
@@ -261,10 +262,13 @@ El sistema cuenta con las siguientes entidades:
 | Campo | Tipo | Descripción |
 |---|---|---|
 | `id` | SERIAL | Identificador único |
-| `fecha` | DATE | Fecha de la jornada |
-| `hora_entrada` | TIME | Hora de entrada |
-| `hora_salida` | TIME | Hora de salida |
-| `usuario_id` | INTEGER | FK → Usuarios |
+| `apertura` | TIMESTAMP | Fecha y hora de apertura |
+| `cierre` | TIMESTAMP | Fecha y hora de cierre |
+| `fondo_inicial` | DECIMAL(10,2) | Monto del fondo inicial |
+| `estatus` | VARCHAR | Estado (ABIERTA, CERRADA) |
+| `total_ventas` | DECIMAL(10,2) | Total de ventas del día |
+| `total_fisico` | DECIMAL(10,2) | Total físico en caja |
+| `diferencia` | DECIMAL(10,2) | Diferencia entre físico y esperado |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 
@@ -276,7 +280,7 @@ El sistema cuenta con las siguientes entidades:
 | `username` | VARCHAR | Nombre de usuario único |
 | `nombre` | VARCHAR | Nombre completo |
 | `passwordHash` | VARCHAR | Hash de contraseña |
-| `refreshToken` | VARCHAR | Refresh Token (opcional) |
+| `refreshToken` | VARCHAR | Token de actualización (opcional) |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 | `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
