@@ -10,7 +10,7 @@ async function main() {
     await AppDataSource.initialize();
     console.log('➜ Conexión a la base de datos establecida');
   } catch (error: any) {
-    console.error('➜ Error al conectar a la base de datos:', error.message);
+    console.error('➜ Error al conectar a la base de datos:', error);
   }
   app.listen(PORT, () => {
     console.log(`➜ API funcionando en el puerto http://localhost:${PORT}`);

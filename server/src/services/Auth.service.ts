@@ -12,11 +12,11 @@ class AuthService {
   }
 
   async setAdmin(data: CreateAdminDTO) {
-    const existe = await this.repository.getByUsername(data.username);
-    if (existe) return { success: false, type: 'CONFLICT', message: `El nombre de usuario '${data.username}' ya está en uso` };
-
     const existeAdmin = (await this.repository.countAdmin()) > 0;
     if (existeAdmin) return { success: false, type: 'CONFLICT', message: 'El sistema ya cuenta con un administrador registrado' };
+
+    const existe = await this.repository.getByUsername(data.username);
+    if (existe) return { success: false, type: 'CONFLICT', message: `El nombre de usuario '${data.username}' ya está en uso` };
 
     try {
       const { password, ...usuarioData } = data;

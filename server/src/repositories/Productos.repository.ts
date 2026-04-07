@@ -25,7 +25,10 @@ class ProductosRepository {
   }
 
   async getByNombre(nombre: string) {
-    return await this.repository.findOneBy({ nombre });
+    return await this.repository.findOne({
+      where: { nombre: nombre },
+      withDeleted: true
+    });
   }
 
   async update(producto: Productos, manager?: EntityManager) {

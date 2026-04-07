@@ -26,7 +26,10 @@ class UsuariosRepository {
   }
 
   async getByUsername(username: string) {
-    return await this.repository.findOneBy({ username });
+    return await this.repository.findOne({
+      where: { username: username },
+      withDeleted: true
+    });
   }
 
   async countAdmin() {

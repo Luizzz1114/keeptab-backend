@@ -31,6 +31,7 @@ class VentasRepository {
     const venta = repo.create({
       total: data.total,
       estatus: data.estatus,
+      jornada: data.jornada ?? undefined,
       cliente: data.cliente ?? undefined,
       detalles_venta: data.detalles as DetallesVenta[],
     });

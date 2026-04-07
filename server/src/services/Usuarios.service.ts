@@ -42,7 +42,8 @@ class UsuariosService {
   async getById(id: number) {
     const usuario = await this.repository.getById(id);
     if (!usuario) return { success: false, type: 'NOT_FOUND', message: 'Usuario no encontrado' };
-    return { success: true, data: usuario };
+    const { refreshToken, ...usuarioSeguro } = usuario;
+    return { success: true, data: usuarioSeguro  };
   }
 
   async update(id: number, data: UpdateUsuarioDTO) {

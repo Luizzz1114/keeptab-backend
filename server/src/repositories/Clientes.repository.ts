@@ -25,7 +25,10 @@ class ClientesRepository {
   }
 
   async getByCedula(cedula: string) {
-    return await this.repository.findOneBy({ cedula });
+    return await this.repository.findOne({
+      where: { cedula: cedula },
+      withDeleted: true
+    });
   }
 
   async update(cliente: Clientes) {
