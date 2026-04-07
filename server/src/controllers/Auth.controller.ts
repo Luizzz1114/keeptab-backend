@@ -1,11 +1,32 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/Auth.service';
 import { z } from 'zod';
-import { loginSchema } from '../schemas/Auth.dto';
+import { createAdminSchema, loginSchema } from '../schemas/Auth.dto';
 
 const authService = new AuthService();
 
 class AuthController {
+
+  static async setAdmin(req: Request, res: Response) {
+    const valid = createAdminSchema.safeParse(req.body);
+    if (!valid.success) {
+      return res.status(400).json({
+        message: 'Datos inválidos',
+        errors: z.flattenError(valid.error).fieldErrors
+      });
+    }
+    try {
+      const resultado = await authService.setAdmin(valid.data);
+      if (!resultado.success) {
+        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : 400;
+        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
+        return res.status(statusCode).json({ message });
+      }
+      return res.status(201).json({ message: 'Administrador creado con éxito', usuario: resultado.data });
+    } catch (error: any) {
+      return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  }
 
   static async login(req: Request, res: Response) {
     const valid = loginSchema.safeParse(req.body);

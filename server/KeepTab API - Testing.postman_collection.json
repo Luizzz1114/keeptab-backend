@@ -17,6 +17,29 @@
       "value": ""
     }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test(\"El status code indica éxito (2xx)\", function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+          "});"
+        ]
+      }
+    }
+  ],
   "item": [
     {
       "name": "1. Health Check",
@@ -24,6 +47,9 @@
         {
           "name": "GET / - Health Check",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
             "header": [],
             "url": {
@@ -39,23 +65,26 @@
       "name": "2. Auth",
       "item": [
         {
-          "name": "POST /auth/create-user",
+          "name": "POST /auth/set-admin",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"Admin\",\n    \"nombre\": \"Administrador Principal\",\n    \"password\": \"Admin123*\",\n    \"rol\": \"ADMIN\"\n}",
+              "raw": "{\n    \"username\": \"Admin\",\n    \"password\": \"Admin123*\",\n    \"rol\": \"ADMIN\"\n}",
               "options": {
                 "raw": { "language": "json" }
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/create-user",
+              "raw": "{{baseUrl}}/auth/set-admin",
               "host": ["{{baseUrl}}"],
-              "path": ["auth", "create-user"]
+              "path": ["auth", "set-admin"]
             }
           }
         },
@@ -77,6 +106,9 @@
             }
           ],
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" }
@@ -98,6 +130,9 @@
         {
           "name": "POST /auth/refresh",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" }
@@ -121,8 +156,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/logout",
@@ -140,9 +174,7 @@
           "name": "GET /usuarios/me - Mi Perfil",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/usuarios/me",
               "host": ["{{baseUrl}}"],
@@ -154,9 +186,7 @@
           "name": "GET /usuarios - Listar todos",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/usuarios",
               "host": ["{{baseUrl}}"],
@@ -169,8 +199,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -190,15 +219,13 @@
           "name": "GET /usuarios/:id - Por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/usuarios/:id",
               "host": ["{{baseUrl}}"],
               "path": ["usuarios", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -208,8 +235,7 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -223,7 +249,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["usuarios", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -232,15 +258,13 @@
           "name": "DELETE /usuarios/:id - Eliminar",
           "request": {
             "method": "DELETE",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/usuarios/:id",
               "host": ["{{baseUrl}}"],
               "path": ["usuarios", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -254,9 +278,7 @@
           "name": "GET /productos - Listar todos",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/productos",
               "host": ["{{baseUrl}}"],
@@ -269,8 +291,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -290,15 +311,13 @@
           "name": "GET /productos/:id - Por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/productos/:id",
               "host": ["{{baseUrl}}"],
               "path": ["productos", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -308,8 +327,7 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -323,7 +341,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["productos", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -332,15 +350,13 @@
           "name": "DELETE /productos/:id - Eliminar",
           "request": {
             "method": "DELETE",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/productos/:id",
               "host": ["{{baseUrl}}"],
               "path": ["productos", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -354,9 +370,7 @@
           "name": "GET /clientes - Listar todos",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/clientes",
               "host": ["{{baseUrl}}"],
@@ -369,8 +383,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -390,15 +403,13 @@
           "name": "GET /clientes/:id - Por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/clientes/:id",
               "host": ["{{baseUrl}}"],
               "path": ["clientes", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -408,8 +419,7 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -423,7 +433,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["clientes", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -432,15 +442,13 @@
           "name": "DELETE /clientes/:id - Eliminar",
           "request": {
             "method": "DELETE",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/clientes/:id",
               "host": ["{{baseUrl}}"],
               "path": ["clientes", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -449,15 +457,13 @@
           "name": "GET /clientes/:id/deudas - Deudas",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/clientes/:id/deudas",
               "host": ["{{baseUrl}}"],
               "path": ["clientes", ":id", "deudas"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -471,9 +477,7 @@
           "name": "GET /ventas - Listar todas",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/ventas",
               "host": ["{{baseUrl}}"],
@@ -486,8 +490,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -507,15 +510,13 @@
           "name": "GET /ventas/:id - Por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/ventas/:id",
               "host": ["{{baseUrl}}"],
               "path": ["ventas", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -524,15 +525,13 @@
           "name": "DELETE /ventas/:id - Eliminar",
           "request": {
             "method": "DELETE",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/ventas/:id",
               "host": ["{{baseUrl}}"],
               "path": ["ventas", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -546,9 +545,7 @@
           "name": "GET /abonos - Listar todos",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/abonos",
               "host": ["{{baseUrl}}"],
@@ -561,8 +558,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -582,15 +578,13 @@
           "name": "GET /abonos/:id - Por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/abonos/:id",
               "host": ["{{baseUrl}}"],
               "path": ["abonos", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -599,15 +593,13 @@
           "name": "DELETE /abonos/:id - Eliminar",
           "request": {
             "method": "DELETE",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/abonos/:id",
               "host": ["{{baseUrl}}"],
               "path": ["abonos", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -621,9 +613,7 @@
           "name": "GET /jornadas - Listar todas",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/jornadas",
               "host": ["{{baseUrl}}"],
@@ -636,8 +626,7 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -657,9 +646,7 @@
           "name": "GET /jornadas/actual - Actual",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/jornadas/actual",
               "host": ["{{baseUrl}}"],
@@ -671,15 +658,13 @@
           "name": "GET /jornadas/:id - Por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/jornadas/:id",
               "host": ["{{baseUrl}}"],
               "path": ["jornadas", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -689,8 +674,7 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -704,7 +688,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["jornadas", ":id", "cerrar"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }
@@ -713,15 +697,13 @@
           "name": "DELETE /jornadas/:id - Eliminar",
           "request": {
             "method": "DELETE",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/jornadas/:id",
               "host": ["{{baseUrl}}"],
               "path": ["jornadas", ":id"],
               "variable": [
-                { "key": "id", "value": "" }
+                { "key": "id", "value": "1" }
               ]
             }
           }

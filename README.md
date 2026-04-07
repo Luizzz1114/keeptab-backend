@@ -296,7 +296,7 @@ El sistema cuenta con las siguientes entidades:
 
 | Método | Ruta | Descripción | Autenticación |
 |---|---|---|---|
-| `POST` | `/auth/create-user` | Crear primer usuario administrador (Setup) | No |
+| `POST` | `/auth/set-admin` | Crear primer usuario administrador (Setup) | No |
 | `POST` | `/auth/login` | Iniciar sesión — devuelve access y refresh token | No |
 | `POST` | `/auth/refresh` | Renovar access token | Sí |
 | `POST` | `/auth/logout` | Cerrar sesión | Sí |

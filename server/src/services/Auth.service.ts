@@ -1,18 +1,41 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import UsuariosRepository from '../repositories/Usuarios.repository';
-import { LoginDTO } from '../schemas/Auth.dto';
+import { CreateAdminDTO, LoginDTO } from '../schemas/Auth.dto';
 
 class AuthService {
 
-  private usuariosRepository: UsuariosRepository;
+  private repository: UsuariosRepository;
 
   constructor() {
-    this.usuariosRepository = new UsuariosRepository();
+    this.repository = new UsuariosRepository();
+  }
+
+  async setAdmin(data: CreateAdminDTO) {
+    const existe = await this.repository.getByUsername(data.username);
+    if (existe) return { success: false, type: 'CONFLICT', message: `El nombre de usuario '${data.username}' ya está en uso` };
+
+    const existeAdmin = (await this.repository.countAdmin()) > 0;
+    if (existeAdmin) return { success: false, type: 'CONFLICT', message: 'El sistema ya cuenta con un administrador registrado' };
+
+    try {
+      const { password, ...usuarioData } = data;
+      const passwordHash = await bcrypt.hash(password, 10);
+      const nuevoUsuario = {
+        ...usuarioData,
+        passwordHash
+      };
+
+      const usuarioCreado = await this.repository.create(nuevoUsuario);
+      const { passwordHash: _, refreshToken, ...usuarioSeguro } = usuarioCreado;
+      return { success: true, data: usuarioSeguro };
+    } catch (error: any) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 
   async login(data: LoginDTO) {
-    const usuario = await this.usuariosRepository.getByUsernameWithPassword(data.username);
+    const usuario = await this.repository.getByUsernameWithPassword(data.username);
     if (!usuario) return { success: false, type: 'UNAUTHORIZED', message: 'Credenciales inválidas' };
     
     const passwordValida = await bcrypt.compare(data.password, usuario.passwordHash);
@@ -33,7 +56,7 @@ class AuthService {
     usuario.refreshToken = refreshToken;
 
     try {
-      await this.usuariosRepository.update(usuario);
+      await this.repository.update(usuario);
       return { success: true, data: { accessToken, refreshToken, usuario: { id: usuario.id, username: usuario.username } } };
     } catch (error) {
       return { success: false, type: 'DB_ERROR' };
@@ -48,7 +71,7 @@ class AuthService {
       return { success: false, type: 'FORBIDDEN', message: 'Token expirado o inválido' };
     }
 
-    const usuario = await this.usuariosRepository.getById(payload.id);
+    const usuario = await this.repository.getById(payload.id);
     if (!usuario || usuario.refreshToken !== tokenRecibido) {
       return { success: false, type: 'FORBIDDEN', message: 'Refresh token inválido o revocado' };
     }
@@ -68,7 +91,7 @@ class AuthService {
     usuario.refreshToken = nuevoRefreshToken;
 
     try {
-      await this.usuariosRepository.update(usuario);
+      await this.repository.update(usuario);
       return { success: true, data: { accessToken: nuevoAccessToken, refreshToken: nuevoRefreshToken } };
     } catch (error) {
       return { success: false, type: 'DB_ERROR' };
@@ -76,13 +99,13 @@ class AuthService {
   }
 
   async logout(id: number) {
-    const usuario = await this.usuariosRepository.getById(id);
+    const usuario = await this.repository.getById(id);
     if (!usuario) return { success: false, type: 'NOT_FOUND', message: 'Usuario no encontrado' };
 
     usuario.refreshToken = null;
 
     try {
-      await this.usuariosRepository.update(usuario);
+      await this.repository.update(usuario);
       return { success: true };
     } catch (error) {
       return { success: false, type: 'DB_ERROR' };

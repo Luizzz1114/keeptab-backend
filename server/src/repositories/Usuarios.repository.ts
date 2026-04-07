@@ -29,6 +29,10 @@ class UsuariosRepository {
     return await this.repository.findOneBy({ username });
   }
 
+  async countAdmin() {
+    return await this.repository.countBy({ rol: 'ADMIN' });
+  }
+
   async getByUsernameWithPassword(username: string) {
     return await this.repository.findOne({
       where: { username },
