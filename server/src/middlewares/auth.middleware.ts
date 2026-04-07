@@ -27,6 +27,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       } else {
         return res.status(401).json({ message: 'Token de acceso inválido' });
       }
+    } else {
+      return res.status(401).json({ message: 'Token de acceso inválido' });
     }
   } catch (error) {
     return res.status(403).json({ message: 'Token de acceso inválido o expirado' });

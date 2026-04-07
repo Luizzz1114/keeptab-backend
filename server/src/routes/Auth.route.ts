@@ -5,7 +5,7 @@ import AuthController from '../controllers/Auth.controller';
 
 const AuthRouter: Router = Router();
 
-AuthRouter.post('/set-admin', AuthController.setAdmin);
+AuthRouter.post('/set-admin', loginLimiter, AuthController.setAdmin);
 AuthRouter.post('/login', loginLimiter, AuthController.login);
 AuthRouter.post('/refresh', authenticate, AuthController.refresh);
 AuthRouter.post('/logout', authenticate, AuthController.logout);

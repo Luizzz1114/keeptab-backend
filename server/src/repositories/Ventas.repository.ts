@@ -14,6 +14,7 @@ export interface CreateVentaInput {
   total: number;
   estatus: string;
   cliente: { id: number } | null;
+  jornada: { id: number } | null;
   detalles: DetalleVentaInput[];
 }
 
@@ -46,7 +47,7 @@ class VentasRepository {
     }
     return await this.repository.find({
       where,
-      relations: ['cliente', 'detalles_venta'],
+      relations: ['cliente', 'jornada', 'detalles_venta'],
       order: {
         created_at: 'DESC'
       }
@@ -57,11 +58,12 @@ class VentasRepository {
     return await this.repository.findOne({
       where: { id: id },
       relations: [
-        'cliente', 
-        'detalles_venta', 
+        'cliente',
+        'jornada',
+        'detalles_venta',
         'detalles_venta.producto',
         'abonos'
-      ] 
+      ]
     });
   }
 

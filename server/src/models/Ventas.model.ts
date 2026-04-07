@@ -22,6 +22,10 @@ class Ventas {
   @JoinColumn({ name: 'cliente_id' })
   declare cliente: Clientes;
 
+  @ManyToOne(() => Jornadas, (jornada) => jornada.ventas, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'jornada_id' })
+  declare jornada: Jornadas;
+
   @OneToMany(() => DetallesVenta, (detalle) => detalle.venta, { cascade: true })
   declare detalles_venta: DetallesVenta[];
 

@@ -1,4 +1,5 @@
 import { AppDataSource } from '../config/database';
+import JornadasRepository from '../repositories/Jornadas.repository';
 import ClientesRepository from '../repositories/Clientes.repository';
 import ProductosRepository from '../repositories/Productos.repository';
 import VentasRepository, { DetalleVentaInput } from '../repositories/Ventas.repository';
@@ -6,11 +7,13 @@ import { CreateVentaDTO } from '../schemas/Ventas.dto';
 
 class VentasService {
 
+  private jornadasRepository: JornadasRepository;
   private clientesRepository: ClientesRepository;
   private productosRepository: ProductosRepository;
   private ventasRepository: VentasRepository;
 
   constructor() {
+    this.jornadasRepository = new JornadasRepository();
     this.clientesRepository = new ClientesRepository();
     this.productosRepository = new ProductosRepository();
     this.ventasRepository = new VentasRepository();
@@ -23,6 +26,12 @@ class VentasService {
       if (!cliente) {
         return { success: false, type: 'NOT_FOUND', message: `Cliente con ID ${data.cliente_id} no encontrado` };
       }
+    }
+
+    const jornadaAbierta = await this.jornadasRepository.getJornadaAbierta();
+    let jornadaId = null;
+    if (jornadaAbierta) {
+      jornadaId = jornadaAbierta.id;
     }
 
     let total = 0;
@@ -65,6 +74,7 @@ class VentasService {
         total,
         estatus: data.estatus,
         cliente: data.cliente_id ? { id: data.cliente_id } as any : undefined,
+        jornada: jornadaId ? { id: jornadaId } as any : undefined,
         detalles
       }, queryRunner.manager);
 
