@@ -234,6 +234,7 @@ El sistema cuenta con las siguientes entidades:
 | `fecha` | TIMESTAMP | Fecha de la venta |
 | `estatus` | VARCHAR | Estado (FIADA, PAGADA) |
 | `cliente_id` | INTEGER | FK → Clientes |
+| `jornada_id` | INTEGER | FK → Jornadas (nullable) |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
 
@@ -364,7 +365,7 @@ El sistema cuenta con las siguientes entidades:
 
 ## Autenticación
 
-Todos los endpoints (excepto `/auth/login`) requieren el header de autorización:
+Todos los endpoints (excepto `/auth/login` y `/auth/set-admin`) requieren el header de autorización
 
 ```
 Authorization: Bearer <access_token>
