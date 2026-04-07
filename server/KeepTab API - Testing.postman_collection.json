@@ -3,6 +3,20 @@
     "name": "KeepTab API - Testing",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/keeptab-api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    }
+  ],
   "item": [
     {
       "name": "1. Health Check",
@@ -33,7 +47,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"Admin\",\n    \"nombre\": \"Administrador Principal\",\n    \"password\": \"Admin123*\"\n}",
+              "raw": "{\n    \"username\": \"Admin\",\n    \"nombre\": \"Administrador Principal\",\n    \"password\": \"Admin123*\",\n    \"rol\": \"ADMIN\"\n}",
               "options": {
                 "raw": { "language": "json" }
               }
@@ -47,6 +61,21 @@
         },
         {
           "name": "POST /auth/login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const res = pm.response.json();",
+                  "    pm.collectionVariables.set(\"token\", res.accessToken);",
+                  "    pm.collectionVariables.set(\"refreshToken\", res.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -71,9 +100,15 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              { "key": "Content-Type", "value": "application/json" }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": { "language": "json" }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/auth/refresh",
               "host": ["{{baseUrl}}"],
@@ -102,6 +137,20 @@
       "name": "3. Usuarios",
       "item": [
         {
+          "name": "GET /usuarios/me - Mi Perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "me"]
+            }
+          }
+        },
+        {
           "name": "GET /usuarios - Listar todos",
           "request": {
             "method": "GET",
@@ -125,7 +174,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"Usuario01\",\n    \"password\": \"Test1234*\"\n}",
+              "raw": "{\n    \"username\": \"Usuario01\",\n    \"password\": \"Test1234*\",\n    \"rol\": \"USER\"\n}",
               "options": {
                 "raw": { "language": "json" }
               }
@@ -164,7 +213,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"Usuario02\"\n}",
+              "raw": "{\n  \"username\": \"Usuario02\",\n  \"rol\": \"USER\"\n}",
               "options": {
                 "raw": { "language": "json" }
               }
@@ -264,7 +313,10 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"precio\": 150.00,\n  \"stock\": 100\n}"
+              "raw": "{\n  \"precio\": 150.00,\n  \"stock\": 100\n}",
+              "options": {
+                "raw": { "language": "json" }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/productos/:id",

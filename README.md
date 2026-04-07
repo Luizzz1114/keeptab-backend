@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Sistema de gestión de punto de venta y control de inventario. Administar productos, clientes, ventas, abonos y jornadas de trabajo.
+  Sistema de gestión de punto de venta y control de inventario. Administrar productos, clientes, ventas, abonos y jornadas de trabajo.
 </p>
 
 
@@ -232,7 +232,7 @@ El sistema cuenta con las siguientes entidades:
 | `id` | SERIAL | Identificador único |
 | `total` | DECIMAL(10,2) | Total de la venta |
 | `fecha` | TIMESTAMP | Fecha de la venta |
-| `estatus` | VARCHAR | Estado (pendiente, completada, cancelada) |
+| `estatus` | VARCHAR | Estado (FIADA, PAGADA) |
 | `cliente_id` | INTEGER | FK → Clientes |
 | `created_at` | TIMESTAMP | Fecha de creación |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
@@ -278,7 +278,7 @@ El sistema cuenta con las siguientes entidades:
 |---|---|---|
 | `id` | SERIAL | Identificador único |
 | `username` | VARCHAR | Nombre de usuario único |
-| `nombre` | VARCHAR | Nombre completo |
+| `rol` | VARCHAR | Rol del usuario (USER, ADMIN) |
 | `passwordHash` | VARCHAR | Hash de contraseña |
 | `refreshToken` | VARCHAR | Token de actualización (opcional) |
 | `created_at` | TIMESTAMP | Fecha de creación |
@@ -296,6 +296,7 @@ El sistema cuenta con las siguientes entidades:
 
 | Método | Ruta | Descripción | Autenticación |
 |---|---|---|---|
+| `POST` | `/auth/create-user` | Crear primer usuario administrador (Setup) | No |
 | `POST` | `/auth/login` | Iniciar sesión — devuelve access y refresh token | No |
 | `POST` | `/auth/refresh` | Renovar access token | Sí |
 | `POST` | `/auth/logout` | Cerrar sesión | Sí |
@@ -354,11 +355,12 @@ El sistema cuenta con las siguientes entidades:
 
 | Método | Ruta | Descripción | Autenticación |
 |---|---|---|---|
-| `GET` | `/usuarios` | Listar todos los usuarios | Sí |
-| `GET` | `/usuarios/:id` | Obtener usuario por ID | Sí |
-| `POST` | `/usuarios` | Crear nuevo usuario | Sí |
-| `PATCH` | `/usuarios/:id` | Actualizar usuario | Sí |
-| `DELETE` | `/usuarios/:id` | Eliminar usuario | Sí |
+| `GET` | `/usuarios/me` | Obtener usuario actual (perfil) | Sí |
+| `GET` | `/usuarios` | Listar todos los usuarios | Sí (ADMIN) |
+| `GET` | `/usuarios/:id` | Obtener usuario por ID | Sí (ADMIN) |
+| `POST` | `/usuarios` | Crear nuevo usuario | Sí (ADMIN) |
+| `PATCH` | `/usuarios/:id` | Actualizar usuario | Sí (ADMIN) |
+| `DELETE` | `/usuarios/:id` | Eliminar usuario | Sí (ADMIN) |
 
 ## Autenticación
 
@@ -377,7 +379,7 @@ El **access token** expira en **15 minutos**. Usa el **refresh token** para obte
 
 1. **Login:** `POST /auth/login` → recibe `accessToken` y `refreshToken`
 2. **Acceso:** usa `accessToken` en el header `Authorization: Bearer <token>`
-3. **Refresh:** cuando el access token expire, usa `POST /auth/logout` con el refresh token para uno nuevo
+3. **Refresh:** cuando el access token expire, usa `POST /auth/refresh` con el refresh token para obtener uno nuevo
 4. **Logout:** `POST /auth/logout` para cerrar sesión
 
 
@@ -386,8 +388,10 @@ El **access token** expira en **15 minutos**. Usa el **refresh token** para obte
 ## Scripts Disponibles
 
 | Comando | Descripción |
-|---|---|
-| `pnpm dev` | Inicia el servidor con **Nodemon** (recarga automática al guardar cambios) |
+| :--- | :--- |
+| `pnpm dev` | Inicia el servidor en modo desarrollo con **Nodemon** (recarga automática al guardar cambios). |
+| `pnpm build` | Compila todo el código TypeScript y lo traduce a JavaScript puro (ideal para producción). |
+| `pnpm start` | Inicia el servidor en modo producción ejecutando el código ya compilado. |
 
 
 
