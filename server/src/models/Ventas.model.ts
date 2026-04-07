@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import Clientes from './Clientes.model';
 import DetallesVenta from './Detalles_venta.model';
 import Abonos from './Abonos.model';
+import Jornadas from './Jornadas.model';
 
 @Entity()
 class Ventas {

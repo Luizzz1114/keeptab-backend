@@ -8,8 +8,8 @@ class Usuarios {
   @Column({ unique: true })
   declare username: string;
 
-  @Column()
-  declare nombre: string;
+  @Column({ default: 'USER' })
+  declare rol: string;
 
   @Column({ select: false }) 
   declare passwordHash: string;

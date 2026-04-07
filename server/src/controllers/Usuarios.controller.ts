@@ -57,6 +57,20 @@ class UsuariosController {
     }
   }
 
+  static async getMe(req: Request, res: Response) {
+    try {
+      const id = req.user?.id; 
+      if (!id) return res.status(401).json({ message: 'Usuario no identificado' });
+      const resultado = await usuariosService.getById(id);
+      if (!resultado.success) {
+        return res.status(404).json({ message: resultado.message });
+      }
+      return res.status(200).json(resultado.data);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  }
+
   static async update(req: Request, res: Response) {
     const id = +req.params.id;
     if (isNaN(id)) return res.status(400).json({ message: 'ID de usuario inválido' });

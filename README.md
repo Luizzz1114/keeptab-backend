@@ -190,7 +190,7 @@ El sistema cuenta con las siguientes entidades:
 - `Productos` — Inventario de productos
 - `Clientes` — Registro de clientes
 - `Ventas` — Registro de ventas
-- `DetallesVentas` — Detalles de cada venta
+- `DetallesVenta` — Detalles de cada venta
 - `Abonos` — Pagos parciales de ventas a crédito
 - `Jornadas` — Control de jornadas de trabajo
 - `Usuarios` — Cuentas de acceso al sistema

@@ -12,7 +12,7 @@ class Clientes {
   @Column()
   declare nombre: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   declare contacto: string | null;
 
   @OneToMany(() => Ventas, (venta) => venta.cliente)

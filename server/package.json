@@ -1,10 +1,11 @@
 {
   "name": "keeptab-api",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "API para KeepTab, un sistema de gestión de punto de venta.",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc"
   },
   "author": "Luis Cortesía",
   "license": "ISC",

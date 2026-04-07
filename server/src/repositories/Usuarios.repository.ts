@@ -16,7 +16,9 @@ class UsuariosRepository {
   }
 
   async getAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+      select: ['id', 'username', 'rol', 'created_at', 'updated_at']
+    });
   }
 
   async getById(id: Usuarios['id']) {
@@ -30,7 +32,7 @@ class UsuariosRepository {
   async getByUsernameWithPassword(username: string) {
     return await this.repository.findOne({
       where: { username },
-      select: ['id', 'username', 'nombre', 'passwordHash', 'refreshToken']
+      select: ['id', 'username', 'rol', 'passwordHash', 'refreshToken']
     });
   }
 
