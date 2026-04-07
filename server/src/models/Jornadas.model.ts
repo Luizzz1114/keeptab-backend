@@ -27,6 +27,9 @@ class Jornadas {
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   declare diferencia: number;
 
+  @OneToMany(() => Ventas, (venta) => venta.jornada)
+  declare ventas: Ventas[];
+
   @CreateDateColumn()
   declare created_at: Date;
 

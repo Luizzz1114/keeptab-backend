@@ -14,6 +14,7 @@ export interface CreateVentaInput {
   total: number;
   estatus: string;
   cliente: { id: number } | null;
+  jornada: { id: number } | null;
   detalles: DetalleVentaInput[];
 }
 
@@ -31,6 +32,7 @@ class VentasRepository {
       total: data.total,
       estatus: data.estatus,
       cliente: data.cliente ?? undefined,
+      jornada: data.jornada ?? undefined,
       detalles_venta: data.detalles as DetallesVenta[],
     });
     return await repo.save(venta);
@@ -46,7 +48,7 @@ class VentasRepository {
     }
     return await this.repository.find({
       where,
-      relations: ['cliente', 'detalles_venta'],
+      relations: ['cliente', 'jornada', 'detalles_venta'],
       order: {
         created_at: 'DESC'
       }
@@ -58,6 +60,7 @@ class VentasRepository {
       where: { id: id },
       relations: [
         'cliente', 
+        'jornada',
         'detalles_venta', 
         'detalles_venta.producto',
         'abonos'
