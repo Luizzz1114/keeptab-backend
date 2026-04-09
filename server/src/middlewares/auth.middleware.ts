@@ -65,5 +65,5 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (req.user && req.user.rol === 'ADMIN') {
     return next();
   }
-  return sendError(res, 'UNAUTHORIZED', 'Acceso denegado: Se requieren permisos de administrador')
+  return sendError(res, 'FORBIDDEN', 'Acceso denegado: Se requieren permisos de administrador');
 }

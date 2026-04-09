@@ -7,11 +7,7 @@ export const validateBody = (schema: z.ZodTypeAny) => {
     const resultado = schema.safeParse(req.body);
     if(!resultado.success) {
       const flattened = z.flattenError(resultado.error);
-      return res.status(400).json({
-        success: false,
-        message: 'Datos inválidos',
-        errors: flattened.fieldErrors
-      });
+      return sendError(res, 'BAD_REQUEST', 'Datos inválidos', flattened.fieldErrors);
     }
     req.body = resultado.data;
     next();
