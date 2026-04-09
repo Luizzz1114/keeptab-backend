@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import JornadasService from '../services/Jornadas.service';
 import { sendSuccess, sendError } from '../utils/responses';
 
-
 const jornadasService = new JornadasService();
 
 class JornadasController {
@@ -14,8 +13,8 @@ class JornadasController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Jornada abierta con éxito', jornada: resultado.data });
-    } catch (error) {
+      return sendSuccess(res, 201, resultado.data, 'Jornada abierta con éxito' );
+    } catch (error: any) {
       return sendError(res);
     }
   }
@@ -26,8 +25,8 @@ class JornadasController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, { jornadas: resultado.data });
-    } catch (error) {
+      return sendSuccess(res, 200, resultado.data);
+    } catch (error: any) {
       return sendError(res);
     }
   }
@@ -39,8 +38,8 @@ class JornadasController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { jornada: resultado.data });
-    } catch (error) {
+      return sendSuccess(res, 200, resultado.data);
+    } catch (error: any) {
       return sendError(res);
     }
   }
@@ -51,8 +50,8 @@ class JornadasController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { jornada: resultado.data });
-    } catch (error) {
+      return sendSuccess(res, 200, resultado.data);
+    } catch (error: any) {
       return sendError(res);
     }
   }
@@ -65,8 +64,8 @@ class JornadasController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Jornada cerrada con éxito', jornada: resultado.data });
-    } catch (error) {
+      return sendSuccess(res, 200, resultado.data, 'Jornada cerrada con éxito');
+    } catch (error: any) {
       return sendError(res);
     }
   }
@@ -78,8 +77,8 @@ class JornadasController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Jornada eliminada correctamente' });
-    } catch (error) {
+      return sendSuccess(res, 200, null, 'Jornada eliminada correctamente');
+    } catch (error: any) {
       return sendError(res);
     }
   }

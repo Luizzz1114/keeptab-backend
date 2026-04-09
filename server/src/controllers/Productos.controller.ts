@@ -13,7 +13,7 @@ class ProductosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Producto registrado con éxito', producto: resultado.data });
+      return sendSuccess(res, 201, resultado.data, 'Producto registrado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -28,7 +28,7 @@ class ProductosController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, { productos: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -41,7 +41,7 @@ class ProductosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { producto: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -55,7 +55,7 @@ class ProductosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Producto actualizado con éxito', producto: resultado.data });
+      return sendSuccess(res, 200, resultado.data, 'Producto actualizado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -68,7 +68,7 @@ class ProductosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Producto eliminado con éxito' });
+      return sendSuccess(res, 200, null, 'Producto eliminado con éxito');
     } catch (error: any) {
       return sendError(res);
     }

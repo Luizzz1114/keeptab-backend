@@ -13,7 +13,7 @@ class UsuariosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Usuario registrado con éxito', usuario: resultado.data });
+      return sendSuccess(res, 201, resultado.data, 'Usuario registrado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -28,7 +28,7 @@ class UsuariosController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, { usuarios: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -41,7 +41,7 @@ class UsuariosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { usuario: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -54,7 +54,7 @@ class UsuariosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { usuario: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error) {
       return sendError(res);
     }
@@ -68,7 +68,7 @@ class UsuariosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Usuario actualizado con éxito', usuario: resultado.data });
+      return sendSuccess(res, 200, resultado.data, 'Usuario actualizado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -81,7 +81,7 @@ class UsuariosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Usuario eliminado con éxito' });
+      return sendSuccess(res, 200, null, 'Usuario eliminado con éxito');
     } catch (error: any) {
       return sendError(res);
     }

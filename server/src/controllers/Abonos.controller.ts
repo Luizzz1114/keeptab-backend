@@ -13,7 +13,7 @@ class AbonosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Abono registrado con éxito', abono: resultado.data });
+      return sendSuccess(res, 201, resultado.data, 'Abono registrado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -25,7 +25,7 @@ class AbonosController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, { abonos: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -38,7 +38,7 @@ class AbonosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { abono: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -51,7 +51,7 @@ class AbonosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Abono eliminado con éxito y deuda restaurada' });
+      return sendSuccess(res, 200, null, 'Abono eliminado con éxito y deuda restaurada');
     } catch (error: any) {
       return sendError(res);
     }

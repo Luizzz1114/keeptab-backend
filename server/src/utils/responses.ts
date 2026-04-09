@@ -11,12 +11,19 @@ const HTTP_STATUS = {
 
 type HttpStatusKey = keyof typeof HTTP_STATUS;
 
-export const sendSuccess = (res: Response, status: number, data: any) => {
-  return res.status(status).json(data);
+export const sendSuccess = (res: Response, status: number, data: any = null, message?: string) => {
+  return res.status(status).json({
+    success: true,
+    message: message || 'Operación exitosa',
+    data: data
+  });
 }
 
 export const sendError = (res: Response, type?: string | null, message: string = 'Ha ocurrido un error') => {
   const status = HTTP_STATUS[type as HttpStatusKey] || 500;
   const finalMessage = status === 500 ? 'Error interno del servidor' : message;
-  return res.status(status).json({ message: finalMessage });
+  return res.status(status).json({ 
+    success: false, 
+    message: finalMessage 
+  });
 }

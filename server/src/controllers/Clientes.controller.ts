@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { sendSuccess, sendError } from '../utils/responses';
 import ClientesService from '../services/Clientes.service';
 
-
 const clientesService = new ClientesService();
 
 class ClientesController {
@@ -14,7 +13,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Cliente registrado con éxito', cliente: resultado.data });
+      return sendSuccess(res, 201, resultado.data, 'Cliente registrado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -29,7 +28,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res);
       }
-      ;return sendSuccess(res, 200, { clientes: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -42,7 +41,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { cliente: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -55,7 +54,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { cliente: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -69,7 +68,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Cliente actualizado con éxito', cliente: resultado.data });
+      return sendSuccess(res, 200, resultado.data, 'Cliente actualizado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -82,7 +81,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Cliente eliminado con éxito' });
+      return sendSuccess(res, 200, null, 'Cliente eliminado con éxito');
     } catch (error: any) {
       return sendError(res);
     }

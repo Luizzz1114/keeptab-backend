@@ -13,7 +13,7 @@ class AuthController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Administrador creado con éxito', usuario: resultado.data });
+      return sendSuccess(res, 201, resultado.data, 'Administrador creado con éxito');
     } catch (error: any) {
       return sendError(res);
     }
@@ -26,7 +26,7 @@ class AuthController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { usuario: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -39,7 +39,7 @@ class AuthController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { usuario: resultado.data });
+      return sendSuccess(res, 200, resultado.data);
     } catch (error: any) {
       return sendError(res);
     }
@@ -52,7 +52,7 @@ class AuthController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, { message: 'Sesión cerrada exitosamente' });
+      return sendSuccess(res, 200, null, 'Sesión cerrada exitosamente');
     } catch (error: any) {
       return sendError(res);
     }

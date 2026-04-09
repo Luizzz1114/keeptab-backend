@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Ventas from './Ventas.model';
 import Productos from './Productos.model';
 
@@ -10,7 +10,7 @@ class DetallesVenta {
   @Column()
   declare cantidad: number;
 
-  @Column('decimal', { name: 'precio_unitario', precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
   declare precio_unitario: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
