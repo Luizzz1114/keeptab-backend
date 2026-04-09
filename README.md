@@ -14,7 +14,6 @@
 
 
 
-
 ## Tabla de Contenidos
 
 - [Características Principales](#características-principales)
@@ -25,10 +24,9 @@
 - [Ejecución](#ejecución)
 - [Base de Datos](#base-de-datos)
 - [Modelo de Datos](#modelo-de-datos)
-- [API REST — Referencia de Endpoints](#api-rest--referencia-de-endpoints)
+- [API REST - Referencia de Endpoints](#api-rest---referencia-de-endpoints)
 - [Scripts Disponibles](#scripts-disponibles)
-- [Autores](#autores)
-
+- [Autor](#autor)
 
 
 
@@ -46,8 +44,9 @@
 
 
 
-
 ## Tecnologías
+
+### Backend
 
 | Tecnología | Versión | Propósito |
 |---|---|---|
@@ -67,12 +66,11 @@
 
 
 
-
 ## Arquitectura del Proyecto
 
 El backend sigue una arquitectura en **3 capas** (Controller → Service → Repository) con separación clara de responsabilidades.
 
-```
+```text
 KeepTab/
 │
 ├── server/                      # Backend — Express 5 + TypeORM + PostgreSQL
@@ -95,7 +93,6 @@ KeepTab/
 
 
 
-
 ## Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
@@ -105,7 +102,6 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 | Node.js | 18.x | [nodejs.org](https://nodejs.org/) |
 | pnpm | 10.x | [pnpm.io](https://pnpm.io/) |
 | PostgreSQL | 14.x | [postgresql.org/download](https://www.postgresql.org/download/) |
-
 
 
 
@@ -162,18 +158,32 @@ CORS_ORIGIN=http://localhost:5173
 
 
 
-
 ## Ejecución
 
 ### Modo desarrollo
+
+Inicia el servidor con recarga automática para desarrollo:
 
 ```bash
 cd server
 pnpm dev
 ```
 
-El servidor estará disponible en `http://localhost:3000/keeptab-api`
+> [!NOTE]
+> El servidor estará disponible en `http://localhost:3000/keeptab-api`
 
+### Modo producción
+
+Para compilar el código TypeScript a JavaScript y ejecutar la versión optimizada:
+
+```bash
+cd server
+pnpm build
+pnpm start
+```
+
+> [!IMPORTANT]
+> Asegúrate de que tu base de datos PostgreSQL esté activa y de tener tu archivo `.env` configurado correctamente antes de iniciar el servidor en entorno de producción.
 
 
 
@@ -181,7 +191,7 @@ El servidor estará disponible en `http://localhost:3000/keeptab-api`
 
 ### Configuración
 
-El backend utiliza **TypeORM** para la conexión y gestión de la base de datos. La configuración se encuentra en `server/src/config/database.ts`.
+El backend utiliza **TypeORM** para la conexión y gestión de la base de datos. La configuración se encuentra en [`server/src/config/database.ts`](server/src/config/database.ts).
 
 ### Entidades disponibles
 
@@ -194,7 +204,6 @@ El sistema cuenta con las siguientes entidades:
 - `Abonos` — Pagos parciales de ventas a crédito
 - `Jornadas` — Control de jornadas de trabajo
 - `Usuarios` — Cuentas de acceso al sistema
-
 
 
 
@@ -288,8 +297,7 @@ El sistema cuenta con las siguientes entidades:
 
 
 
-
-## API REST — Referencia de Endpoints
+## API REST - Referencia de Endpoints
 
 **URL base:** `/keeptab-api`
 
@@ -299,7 +307,7 @@ El sistema cuenta con las siguientes entidades:
 |---|---|---|---|
 | `POST` | `/auth/set-admin` | Crear primer usuario administrador (Setup) | No |
 | `POST` | `/auth/login` | Iniciar sesión — devuelve access y refresh token | No |
-| `POST` | `/auth/refresh` | Renovar access token | Sí |
+| `POST` | `/auth/refresh` | Renovar access token | Sí (Refesh Token) |
 | `POST` | `/auth/logout` | Cerrar sesión | Sí |
 
 ### Productos (`/productos`)
@@ -348,9 +356,9 @@ El sistema cuenta con las siguientes entidades:
 | `GET` | `/jornadas` | Listar todas las jornadas | Sí |
 | `GET` | `/jornadas/actual` | Obtener jornada actual | Sí |
 | `GET` | `/jornadas/:id` | Obtener jornada por ID | Sí |
-| `POST` | `/jornadas/abrir` | Registrar y abrir jornada | Sí |
-| `PATCH` | `/jornadas/:id/cerrar` | Cerrar jornada | Sí |
-| `DELETE` | `/jornadas/:id` | Eliminar jornada | Sí |
+| `POST` | `/jornadas/abrir` | Registrar y abrir jornada | Sí (ADMIN) |
+| `PATCH` | `/jornadas/:id/cerrar` | Cerrar jornada | Sí (ADMIN) |
+| `DELETE` | `/jornadas/:id` | Eliminar jornada | Sí (ADMIN) |
 
 ### Usuarios (`/usuarios`)
 
@@ -363,9 +371,11 @@ El sistema cuenta con las siguientes entidades:
 | `PATCH` | `/usuarios/:id` | Actualizar usuario | Sí (ADMIN) |
 | `DELETE` | `/usuarios/:id` | Eliminar usuario | Sí (ADMIN) |
 
+
+
 ## Autenticación
 
-Todos los endpoints (excepto `/auth/login` y `/auth/set-admin`) requieren el header de autorización
+Todos los endpoints (excepto `/auth/set-admin`, `/auth/login` y  `/auth/refresh`) requieren el header de autorización
 
 ```
 Authorization: Bearer <access_token>
@@ -375,14 +385,12 @@ El **access token** expira en **15 minutos**. Usa el **refresh token** para obte
 
 
 
-
 ### Flujo de autenticación
 
 1. **Login:** `POST /auth/login` → recibe `accessToken` y `refreshToken`
 2. **Acceso:** usa `accessToken` en el header `Authorization: Bearer <token>`
 3. **Refresh:** cuando el access token expire, usa `POST /auth/refresh` con el refresh token para obtener uno nuevo
 4. **Logout:** `POST /auth/logout` para cerrar sesión
-
 
 
 
@@ -396,7 +404,6 @@ El **access token** expira en **15 minutos**. Usa el **refresh token** para obte
 
 
 
-
-## Autores
+## Autor
 
 Luis Cortesía
