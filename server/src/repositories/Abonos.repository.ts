@@ -21,13 +21,17 @@ class AbonosRepository {
   }
 
   async getAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+      relations: ['venta', 'venta.cliente'],
+      withDeleted: true
+    });
   }
 
   async getById(id: Abonos['id']) {
     return await this.repository.findOne({
       where: { id: id },
-      relations: ['venta', 'venta.abonos']
+      relations: ['venta', 'venta.cliente'],
+      withDeleted: true
     });
   }
 

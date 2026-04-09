@@ -48,7 +48,7 @@ class AuthService {
     );
 
     const refreshToken = jwt.sign(
-      { id: usuario.id },
+      { id: usuario.id, username: usuario.username },
       process.env.JWT_REFRESH_SECRET as string,
       { expiresIn: '7d' }
     );
@@ -63,16 +63,8 @@ class AuthService {
     }
   }
 
-  async refresh(tokenRecibido: string) {
-    let payload: any;
-    try {
-      payload = jwt.verify(tokenRecibido, process.env.JWT_REFRESH_SECRET as string) as { id: number };
-    } catch (error) {
-      return { success: false, type: 'FORBIDDEN', message: 'Token expirado o inválido' };
-    }
-
-    const usuario = await this.repository.getById(payload.id);
-    if (!usuario || usuario.refreshToken !== tokenRecibido) {
+  async refresh(usuario: any, tokenRecibido: string) {
+    if (usuario.refreshToken !== tokenRecibido) {
       return { success: false, type: 'FORBIDDEN', message: 'Refresh token inválido o revocado' };
     }
 
@@ -83,7 +75,7 @@ class AuthService {
     );
 
     const nuevoRefreshToken = jwt.sign(
-      { id: usuario.id },
+      { id: usuario.id, username: usuario.username },
       process.env.JWT_REFRESH_SECRET as string,
       { expiresIn: '7d' }
     );
@@ -98,12 +90,8 @@ class AuthService {
     }
   }
 
-  async logout(id: number) {
-    const usuario = await this.repository.getById(id);
-    if (!usuario) return { success: false, type: 'NOT_FOUND', message: 'Usuario no encontrado' };
-
+  async logout(usuario: any) {
     usuario.refreshToken = null;
-
     try {
       await this.repository.update(usuario);
       return { success: true };

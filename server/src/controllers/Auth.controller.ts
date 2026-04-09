@@ -34,8 +34,9 @@ class AuthController {
 
   static async refresh(req: Request, res: Response) {
     const { refreshToken } = req.body;
+    const usuario = req.user;
     try {
-      const resultado = await authService.refresh(refreshToken);
+      const resultado = await authService.refresh(usuario, refreshToken);
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
@@ -46,11 +47,11 @@ class AuthController {
   }
 
   static async logout(req: Request, res: Response) {
-    const id = Number(req.user?.id);
+    const usuario = req.user;
     try {
-      const resultado = await authService.logout(id);
+      const resultado = await authService.logout(usuario);
       if (!resultado.success) {
-        return sendError(res, resultado.type, resultado.message);
+        return sendError(res, resultado.type);
       }
       return sendSuccess(res, 200, null, 'Sesión cerrada exitosamente');
     } catch (error: any) {

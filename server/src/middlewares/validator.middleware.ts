@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { sendError } from '../utils/responses';
 import { z } from 'zod';
 
 export const validateBody = (schema: z.ZodTypeAny) => {
@@ -7,6 +8,7 @@ export const validateBody = (schema: z.ZodTypeAny) => {
     if(!resultado.success) {
       const flattened = z.flattenError(resultado.error);
       return res.status(400).json({
+        success: false,
         message: 'Datos inválidos',
         errors: flattened.fieldErrors
       });
@@ -20,7 +22,7 @@ export const validateId = (entity: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const id = Number(req.params.id);
     if (isNaN(id) || !Number.isInteger(id) || id < 0) {
-      return res.status(400).json({ message: `ID de ${entity} inválido` });
+      return sendError(res, 'BAD_REQUEST', `ID de ${entity} inválido`);
     }
     next();
   }

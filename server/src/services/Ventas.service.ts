@@ -124,7 +124,7 @@ class VentasService {
 
     const productosUpdate = [];
     for (const detalle of venta.detalles_venta) {
-      if (detalle.producto.conteo) {
+      if (detalle.producto && detalle.producto.conteo) {
         detalle.producto.stock += detalle.cantidad;
         productosUpdate.push(detalle.producto);
       }
@@ -143,6 +143,8 @@ class VentasService {
 
       await queryRunner.commitTransaction();
       return { success: true };
+
+
 
     } catch (error) {
       await queryRunner.rollbackTransaction();

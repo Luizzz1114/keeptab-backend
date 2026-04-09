@@ -48,10 +48,11 @@ class VentasRepository {
     }
     return await this.repository.find({
       where,
-      relations: ['cliente', 'jornada', 'detalles_venta'],
+      relations: ['cliente', 'detalles_venta'],
       order: {
         created_at: 'DESC'
-      }
+      },
+      withDeleted: true
     });
   }
 
@@ -64,7 +65,8 @@ class VentasRepository {
         'detalles_venta',
         'detalles_venta.producto',
         'abonos'
-      ]
+      ],
+      withDeleted: true
     });
   }
 
