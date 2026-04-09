@@ -1,4 +1,4 @@
-<h1 align="center">KeepTab</h1>
+<h1 align="center">KeepTab - Backend</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white" alt="Node.js" />
@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Sistema de gestión de punto de venta y control de inventario. Administrar productos, clientes, ventas, abonos y jornadas de trabajo.
+  Backend para la gestión de punto de venta y control de inventario. Administrar productos, clientes, ventas, abonos y jornadas de trabajo.
 </p>
 
 
@@ -46,8 +46,6 @@
 
 ## Tecnologías
 
-### Backend
-
 | Tecnología | Versión | Propósito |
 |---|---|---|
 | [Node.js](https://nodejs.org/) | 18+ | Entorno de ejecución JavaScript |
@@ -71,22 +69,20 @@
 El backend sigue una arquitectura en **3 capas** (Controller → Service → Repository) con separación clara de responsabilidades.
 
 ```text
-KeepTab/
-│
-├── server/                      # Backend — Express 5 + TypeORM + PostgreSQL
-│   ├── src/
-│   │   ├── config/              # Conexión a la base de datos
-│   │   ├── controllers/         # Controladores HTTP (1 por entidad)
-│   │   ├── middlewares/         # Capa de seguridad (JWT, rate limiting)
-│   │   ├── models/              # Entidades de TypeORM
-│   │   ├── repositories/        # Capa de acceso a datos
-│   │   ├── routes/              # Definición de rutas Express
-│   │   ├── schemas/             # DTOs con Zod
-│   │   ├── services/            # Lógica de negocio
-│   │   └── index.ts             # Punto de entrada
-│   ├── package.json
-│   └── tsconfig.json
-│
+keeptab-backend/             # Backend — Express 5 + TypeORM + PostgreSQL
+│                   
+├── src/
+│   ├── config/              # Conexión a la base de datos
+│   ├── controllers/         # Controladores HTTP (1 por entidad)
+│   ├── middlewares/         # Capa de seguridad (JWT, rate limiting)
+│   ├── models/              # Entidades de TypeORM
+│   ├── repositories/        # Capa de acceso a datos
+│   ├── routes/              # Definición de rutas Express
+│   ├── schemas/             # DTOs con Zod
+│   ├── services/            # Lógica de negocio
+│   └── index.ts             # Punto de entrada
+├── package.json
+├── tsconfig.json
 ├── .gitignore
 └── README.md
 ```
@@ -110,20 +106,19 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/Luizzz1114/KeepTab.git
-cd KeepTab
+git clone https://github.com/Luizzz1114/keeptab-backend.git
+cd keeptab-backend
 ```
 
 ### 2. Instalar dependencias
 
 ```bash
-cd server
 pnpm install
 ```
 
 ### 3. Configurar variables de entorno
 
-Crea un archivo `.env` dentro de la carpeta `server/` con el siguiente contenido:
+Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido:
 
 ```env
 # ── Base de datos PostgreSQL ──
@@ -165,7 +160,6 @@ CORS_ORIGIN=http://localhost:5173
 Inicia el servidor con recarga automática para desarrollo:
 
 ```bash
-cd server
 pnpm dev
 ```
 
@@ -177,7 +171,6 @@ pnpm dev
 Para compilar el código TypeScript a JavaScript y ejecutar la versión optimizada:
 
 ```bash
-cd server
 pnpm build
 pnpm start
 ```
@@ -191,7 +184,7 @@ pnpm start
 
 ### Configuración
 
-El backend utiliza **TypeORM** para la conexión y gestión de la base de datos. La configuración se encuentra en [`server/src/config/database.ts`](server/src/config/database.ts).
+El backend utiliza **TypeORM** para la conexión y gestión de la base de datos. La configuración se encuentra en [`src/config/database.ts`](src/config/database.ts).
 
 ### Entidades disponibles
 

@@ -26,11 +26,4 @@ postman/
 .env.production.local
 
 # Carpeta de compilación
-server/dist/
-
-# --- CLIENT (Frontend) ---
-# Carpeta de compilación de Vite
-client/dist/
-
-# Archivos locales de Vite
-client/*.local
+./dist/
