@@ -1,0 +1,27 @@
+import { Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
+
+export const validateBody = (schema: z.ZodTypeAny) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const resultado = schema.safeParse(req.body);
+    if(!resultado.success) {
+      const flattened = z.flattenError(resultado.error);
+      return res.status(400).json({
+        message: 'Datos inválidos',
+        errors: flattened.fieldErrors
+      });
+    }
+    req.body = resultado.data;
+    next();
+  }
+}
+
+export const validateId = (entity: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const id = Number(req.params.id);
+    if (isNaN(id) || !Number.isInteger(id) || id < 0) {
+      return res.status(400).json({ message: `ID de ${entity} inválido` });
+    }
+    next();
+  }
+}
