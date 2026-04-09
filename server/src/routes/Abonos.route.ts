@@ -6,12 +6,14 @@ import AbonosController from '../controllers/Abonos.controller';
 
 const AbonosRouter: Router = Router();
 
+AbonosRouter.use(authenticate);
+
 AbonosRouter.route('/')
-  .get(authenticate, AbonosController.getAll)
-  .post(authenticate, validateBody(createAbonoSchema), AbonosController.create);
+  .get(AbonosController.getAll)
+  .post(validateBody(createAbonoSchema), AbonosController.create);
 
 AbonosRouter.route('/:id')
-  .get(authenticate, validateId('abono'), AbonosController.getById)
-  .delete(authenticate, validateId('abono'), AbonosController.delete);
+  .get(validateId('abono'), AbonosController.getById)
+  .delete(validateId('abono'), AbonosController.delete);
 
 export default AbonosRouter;

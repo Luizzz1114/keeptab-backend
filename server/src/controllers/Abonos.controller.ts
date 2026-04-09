@@ -11,11 +11,10 @@ class AbonosController {
     try {
       const resultado = await abonosService.create(data);
       if (!resultado.success) {
-        return sendError(res, resultado.type, resultado.message)
+        return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 201, { message: 'Abono registrado con éxito', data: resultado.data });
+      return sendSuccess(res, 201, { message: 'Abono registrado con éxito', abono: resultado.data });
     } catch (error: any) {
-      console.error('ERROR: ', error);
       return sendError(res);
     }
   }
@@ -26,7 +25,7 @@ class AbonosController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, resultado.data);
+      return sendSuccess(res, 200, { abonos: resultado.data });
     } catch (error: any) {
       return sendError(res);
     }
@@ -39,7 +38,7 @@ class AbonosController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, resultado.data);
+      return sendSuccess(res, 200, { abono: resultado.data });
     } catch (error: any) {
       return sendError(res);
     }
