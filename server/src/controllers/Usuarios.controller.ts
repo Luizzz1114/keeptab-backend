@@ -1,30 +1,21 @@
 import { Request, Response } from 'express';
+import { sendSuccess, sendError } from '../utils/responses';
 import UsuariosService from '../services/Usuarios.service';
-import { z } from 'zod';
-import { createUsuarioSchema, updateUsuarioSchema } from '../schemas/Usuarios.dto';
 
 const usuariosService = new UsuariosService();
 
 class UsuariosController {
   
   static async create(req: Request, res: Response) {
-    const valid = createUsuarioSchema.safeParse(req.body);
-    if (!valid.success) {
-      return res.status(400).json({
-        message: 'Datos inválidos',
-        errors: z.flattenError(valid.error).fieldErrors
-      });
-    }
+    const data = req.body;
     try {
-      const resultado = await usuariosService.create(valid.data);
+      const resultado = await usuariosService.create(data);
       if (!resultado.success) {
-        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : 400;
-        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
-        return res.status(statusCode).json({ message });
+        return sendError(res, resultado.type, resultado.message);
       }
-      return res.status(201).json({ message: 'Usuario registrado con éxito', usuario: resultado.data });
+      return sendSuccess(res, 201, { message: 'Usuario registrado con éxito', usuario: resultado.data });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Error interno del servidor' });
+      return sendError(res);
     }
   }
 
@@ -37,76 +28,62 @@ class UsuariosController {
       if (!resultado.success) {
         return res.status(400).json({ message: 'Error al obtener los usuarios' });
       }
-      return res.status(200).json(resultado.data);
+      return sendSuccess(res, 200, { usuarios: resultado.data });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Error interno del servidor' });
+      return sendError(res);
     }
   }
 
   static async getById(req: Request, res: Response) {
-    const id = +req.params.id;
-    if (isNaN(id)) return res.status(400).json({ message: 'ID de usuario inválido' });
+    const id = Number(req.params.id);
     try {
       const resultado = await usuariosService.getById(id);
       if (!resultado.success) {
-        return res.status(404).json({ message: resultado.message });
+        return sendError(res, resultado.type, resultado.message);
       }
-      return res.status(200).json(resultado.data);
+      return sendSuccess(res, 200, { usuario: resultado.data });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Error interno del servidor' });
+      return sendError(res);
     }
   }
 
   static async getMe(req: Request, res: Response) {
+    const id = Number(req.user?.id);
     try {
-      const id = req.user?.id; 
-      if (!id) return res.status(401).json({ message: 'Usuario no identificado' });
       const resultado = await usuariosService.getById(id);
       if (!resultado.success) {
-        return res.status(404).json({ message: resultado.message });
+        return sendError(res, resultado.type, resultado.message);
       }
-      return res.status(200).json(resultado.data);
+      return sendSuccess(res, 200, { usuario: resultado.data });
     } catch (error) {
-      return res.status(500).json({ message: 'Error interno del servidor' });
+      return sendError(res);
     }
   }
 
   static async update(req: Request, res: Response) {
-    const id = +req.params.id;
-    if (isNaN(id)) return res.status(400).json({ message: 'ID de usuario inválido' });
-    const valid = updateUsuarioSchema.safeParse(req.body);
-    if (!valid.success) {
-      return res.status(400).json({
-        message: 'Datos inválidos',
-        errors: z.flattenError(valid.error).fieldErrors
-      });
-    }
+    const id = Number(req.params.id);
+    const data = req.body;
     try {
-      const resultado = await usuariosService.update(id, valid.data);
+      const resultado = await usuariosService.update(id, data);
       if (!resultado.success) {
-        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : resultado.type === 'NOT_FOUND' ? 404 : 400;
-        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
-        return res.status(statusCode).json({ message });
+        return sendError(res, resultado.type, resultado.message);
       }
-      return res.status(200).json({ message: 'Usuario actualizado con éxito', usuario: resultado.data });
+      return sendSuccess(res, 200, { message: 'Usuario actualizado con éxito', usuario: resultado.data });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Error interno del servidor' });
+      return sendError(res);
     }
   }
 
   static async delete(req: Request, res: Response) {
-    const id = +req.params.id;
-    if (isNaN(id)) return res.status(400).json({ message: 'ID de usuario inválido' });
+    const id = Number(req.params.id);
     try {
       const resultado = await usuariosService.delete(id);
       if (!resultado.success) {
-        const statusCode = resultado.type === 'DB_ERROR' ? 500 : resultado.type === 'CONFLICT' ? 409 : resultado.type === 'NOT_FOUND' ? 404 : 400;
-        const message = statusCode === 500 ? 'Error interno del servidor' : resultado.message;
-        return res.status(statusCode).json({ message });
+        return sendError(res, resultado.type, resultado.message);
       }
-      return res.status(200).json({ message: 'Usuario eliminado con éxito' });
+      return sendSuccess(res, 200, { message: 'Usuario eliminado con éxito' });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Error interno del servidor' });
+      return sendError(res);
     }
   }
   

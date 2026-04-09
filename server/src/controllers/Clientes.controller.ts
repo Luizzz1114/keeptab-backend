@@ -29,7 +29,7 @@ class ClientesController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, { clientes: resultado.data });
+      ;return sendSuccess(res, 200, { clientes: resultado.data });
     } catch (error: any) {
       return sendError(res);
     }

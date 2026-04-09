@@ -28,7 +28,7 @@ class ProductosController {
       if (!resultado.success) {
         return sendError(res);
       }
-      return sendSuccess(res, 200, { productos: resultado.data });;
+      return sendSuccess(res, 200, { productos: resultado.data });
     } catch (error: any) {
       return sendError(res);
     }
