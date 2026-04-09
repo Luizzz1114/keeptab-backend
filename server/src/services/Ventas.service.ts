@@ -140,12 +140,9 @@ class VentasService {
       }
 
       await this.ventasRepository.delete(venta, queryRunner.manager);
-
       await queryRunner.commitTransaction();
       return { success: true };
-
-
-
+      
     } catch (error) {
       await queryRunner.rollbackTransaction();
       return { success: false, type: 'DB_ERROR' };
