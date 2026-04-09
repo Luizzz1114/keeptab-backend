@@ -26,4 +26,4 @@ postman/
 .env.production.local
 
 # Carpeta de compilación
-./dist/
+dist/
