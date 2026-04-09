@@ -130,9 +130,6 @@
         {
           "name": "POST /auth/refresh",
           "request": {
-            "auth": {
-              "type": "noauth"
-            },
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" }
