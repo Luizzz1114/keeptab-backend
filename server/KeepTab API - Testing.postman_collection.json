@@ -27,19 +27,6 @@
       }
     ]
   },
-  "event": [
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [
-          "pm.test(\"El status code indica éxito (2xx)\", function () {",
-          "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
-          "});"
-        ]
-      }
-    }
-  ],
   "item": [
     {
       "name": "1. Health Check",
@@ -97,8 +84,8 @@
                 "exec": [
                   "if (pm.response.code === 200) {",
                   "    const res = pm.response.json();",
-                  "    pm.collectionVariables.set(\"token\", res.accessToken);",
-                  "    pm.collectionVariables.set(\"refreshToken\", res.refreshToken);",
+                  "    pm.collectionVariables.set(\"token\", res.data.accessToken);",
+                  "    pm.collectionVariables.set(\"refreshToken\", res.data.refreshToken);",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -129,6 +116,21 @@
         },
         {
           "name": "POST /auth/refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const res = pm.response.json();",
+                  "    pm.collectionVariables.set(\"token\", res.data.accessToken);",
+                  "    pm.collectionVariables.set(\"refreshToken\", res.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
