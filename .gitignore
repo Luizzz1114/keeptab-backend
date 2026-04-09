@@ -15,6 +15,7 @@ Thumbs.db
 # Configuraciones de editores
 .vscode/
 .idea/
+postman/
 
 # --- SERVER (Backend) ---
 # Variables de entorno
