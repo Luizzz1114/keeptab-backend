@@ -26,7 +26,7 @@ class UsuariosController {
       };
       const resultado = await usuariosService.getAll(queryParams);
       if (!resultado.success) {
-        return res.status(400).json({ message: 'Error al obtener los usuarios' });
+        return sendError(res);
       }
       return sendSuccess(res, 200, { usuarios: resultado.data });
     } catch (error: any) {
