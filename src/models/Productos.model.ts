@@ -9,6 +9,9 @@ class Productos {
   @Column({ unique: true })
   declare nombre: string;
 
+  @Column({ default: 'Otros' })
+  declare categoria: string;
+
   @Column('decimal', { precision: 10, scale: 2 })
   declare precio: number;
 

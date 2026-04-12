@@ -4,6 +4,8 @@ export const createProductoSchema = z.object({
   nombre: z.string({ message: "El nombre es obligatorio y debe ser un texto" })
     .trim()
     .min(2, "El nombre debe tener al menos 2 caracteres"),
+  categoria: z.string({ message: "La categoría es obligatoria y debe ser un texto" })
+    .trim(),
   precio: z.number({ message: "El precio es obligatorio y debe ser un número" })
     .positive("El precio debe ser mayor a cero"),
   conteo: z.boolean({ message: "El conteo debe ser verdadero o falso" })
