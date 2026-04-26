@@ -12,11 +12,10 @@ declare global {
 }
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const bearer = req.headers.authorization;
-  if (!bearer) {
+  const token = req.cookies.accessToken;
+  if (!token) {
     return sendError(res, 'UNAUTHORIZED', 'No se proporcionó token de acceso');
   }
-  const token = bearer.split(' ')[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string) as { id: number, username: string };
     if(typeof decoded === 'object' && decoded.username) {
@@ -37,7 +36,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const authenticateRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
-  const refreshToken = req.body?.refreshToken; 
+  const refreshToken = req.cookies.refreshToken; 
   if (!refreshToken) {
     return sendError(res, 'UNAUTHORIZED', 'No se proporcionó refresh token');
   }

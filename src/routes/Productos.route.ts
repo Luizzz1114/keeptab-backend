@@ -1,12 +1,9 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/auth.middleware';
 import { validateBody, validateId } from '../middlewares/validator.middleware';
 import { createProductoSchema, updateProductoSchema } from '../schemas/Productos.dto';
 import ProductosController from '../controllers/Productos.controller';
 
 const ProductosRouter: Router = Router();
-
-ProductosRouter.use(authenticate);
 
 ProductosRouter.route('/')
   .get(ProductosController.getAll)

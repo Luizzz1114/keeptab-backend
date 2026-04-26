@@ -1,12 +1,10 @@
 import { Router } from 'express';
-import { authenticate, isAdmin } from '../middlewares/auth.middleware';
+import { isAdmin } from '../middlewares/auth.middleware';
 import { validateBody, validateId } from '../middlewares/validator.middleware';
 import { abrirJornadaSchema, cerrarJornadaSchema } from '../schemas/Jornadas.dto';
 import JornadasController from '../controllers/Jornadas.controller';
 
 const JornadasRouter: Router = Router();
-
-JornadasRouter.use(authenticate);
 
 JornadasRouter.get('/', JornadasController.getAll); 
 JornadasRouter.get('/actual', JornadasController.getEstadoActual);

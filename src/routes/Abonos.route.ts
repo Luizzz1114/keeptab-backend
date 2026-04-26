@@ -1,12 +1,9 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/auth.middleware';
 import { validateBody, validateId } from '../middlewares/validator.middleware';
 import { createAbonoSchema } from '../schemas/Abonos.dto';
 import AbonosController from '../controllers/Abonos.controller';
 
 const AbonosRouter: Router = Router();
-
-AbonosRouter.use(authenticate);
 
 AbonosRouter.route('/')
   .get(AbonosController.getAll)

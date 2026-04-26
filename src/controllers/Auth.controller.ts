@@ -4,6 +4,12 @@ import AuthService from '../services/Auth.service';
 
 const authService = new AuthService();
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax' as const,
+};
+
 class AuthController {
 
   static async setAdmin(req: Request, res: Response) {
@@ -26,21 +32,27 @@ class AuthController {
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, resultado.data);
+      const { accessToken, refreshToken, usuario } = resultado.data as { accessToken: string, refreshToken: string, usuario: { id: number, username: string, rol: string } };
+      res.cookie('accessToken', accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
+      res.cookie('refreshToken', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+      return sendSuccess(res, 200, usuario);
     } catch (error: any) {
       return sendError(res);
     }
   }
 
   static async refresh(req: Request, res: Response) {
-    const { refreshToken } = req.body;
+    const refreshTokenOld = req.cookies.refreshToken;
     const usuario = req.user;
     try {
-      const resultado = await authService.refresh(usuario, refreshToken);
+      const resultado = await authService.refresh(usuario, refreshTokenOld);
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
-      return sendSuccess(res, 200, resultado.data);
+      const { accessToken, refreshToken } = resultado.data as { accessToken: string, refreshToken: string };
+      res.cookie('accessToken', accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
+      res.cookie('refreshToken', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+      return sendSuccess(res, 200, null, 'Token renovado');
     } catch (error: any) {
       return sendError(res);
     }
@@ -50,6 +62,8 @@ class AuthController {
     const usuario = req.user;
     try {
       const resultado = await authService.logout(usuario);
+      res.clearCookie('accessToken', cookieOptions);
+      res.clearCookie('refreshToken', cookieOptions);
       if (!resultado.success) {
         return sendError(res, resultado.type);
       }

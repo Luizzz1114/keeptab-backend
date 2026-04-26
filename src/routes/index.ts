@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { Request, Response } from 'express';
+import { authenticate } from '../middlewares/auth.middleware';
 import { sendSuccess } from '../utils/responses';
 import ProductosRouter from './Productos.route';
 import ClientesRouter from './Clientes.route';
@@ -16,6 +17,9 @@ router.get('/', (_req: Request, res: Response) => {
 });
 
 router.use('/auth', AuthRouter);
+
+router.use(authenticate);
+
 router.use('/usuarios', UsuariosRouter)
 router.use('/productos', ProductosRouter);
 router.use('/clientes', ClientesRouter);

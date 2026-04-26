@@ -12,7 +12,12 @@ class JornadasRepository {
   }
 
   async getJornadaAbierta() {
-    return await this.repository.findOneBy({ estatus: 'ABIERTA' });
+    return await this.repository.findOne({ 
+      where: { 
+        estatus: 'ABIERTA' 
+      }, 
+      relations: ['ventas'] 
+    });
   }
 
   async create(data: AbrirJornadaDTO) {
@@ -25,7 +30,18 @@ class JornadasRepository {
   }
 
   async getById(id: Jornadas['id']) {
-    return await this.repository.findOneBy({ id });
+    return await this.repository.findOne({ 
+      where: { 
+        id: id 
+      },
+      relations: {
+        ventas: {
+          detalles: {
+            producto: true
+          }
+        }
+      } 
+    });
   }
 
   async update(jornada: Jornadas) {

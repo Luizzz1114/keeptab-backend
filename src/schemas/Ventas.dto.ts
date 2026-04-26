@@ -15,20 +15,20 @@ export const createVentaSchema = z.object({
     .positive("El ID del cliente debe ser mayor a 0")
     .optional()
     .nullable(),
-  estatus: z.enum(["PAGADA", "FIADA"], {
-    message: "El estatus es obligatorio y solo puede ser 'PAGADA' o 'FIADA'"
+  estatus: z.enum(["CONTADO", "CREDITO"], {
+    message: "El estatus es obligatorio y solo puede ser 'CONTADO' o 'CREDITO'"
   }),
   detalles: z.array(detalleVentaSchema, {
     message: "Los detalles son obligatorios y deben enviarse en una lista"
   }).min(1, "La venta debe incluir al menos un producto"),
 })
 .refine((data) => {
-  if (data.estatus === "FIADA" && !data.cliente_id) {
+  if (data.estatus === "CREDITO" && !data.cliente_id) {
     return false;
   }
   return true; 
 }, {
-  message: "Para registrar una venta FIADA, es obligatorio incluir el ID del cliente",
+  message: "Para registrar una venta CREDITO, es obligatorio incluir el ID del cliente",
   path: ["cliente_id"]
 });
 

@@ -16,11 +16,11 @@ class DetallesVenta {
   @Column('decimal', { precision: 10, scale: 2 })
   declare subtotal: number;
 
-  @ManyToOne(() => Ventas, (venta) => venta.detalles_venta, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Ventas, (venta) => venta.detalles, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'venta_id' })
   declare venta: Ventas;
 
-  @ManyToOne(() => Productos, (producto) => producto.detalles_venta)
+  @ManyToOne(() => Productos, (producto) => producto.detalles)
   @JoinColumn({ name: 'producto_id' })
   declare producto: Productos;
 

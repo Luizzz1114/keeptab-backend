@@ -1,12 +1,9 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/auth.middleware';
 import { validateBody, validateId } from '../middlewares/validator.middleware';
 import { createClienteSchema, updateClienteSchema } from '../schemas/Clientes.dto';
 import ClientesController from '../controllers/Clientes.controller';
 
 const ClientesRouter: Router = Router();
-
-ClientesRouter.use(authenticate);
 
 ClientesRouter.route('/')
   .get(ClientesController.getAll)

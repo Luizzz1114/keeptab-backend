@@ -21,8 +21,8 @@ class Productos {
   @Column({ default: 0 })
   declare stock: number;
 
-  @OneToMany(() => DetallesVenta, (detalle) => detalle.producto)
-  declare detalles_venta: DetallesVenta[];
+  @OneToMany(() => DetallesVenta, (detalles) => detalles.producto)
+  declare detalles: DetallesVenta[];
 
   @CreateDateColumn()
   declare created_at: Date;

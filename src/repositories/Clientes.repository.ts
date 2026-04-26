@@ -17,11 +17,36 @@ class ClientesRepository {
   }
 
   async getAll() {
-    return await this.repository.find();
+    return await this.repository.createQueryBuilder('clientes')
+      .leftJoin('clientes.ventas', 'venta', 'venta.estatus = :estatus', { estatus: 'CREDITO' })
+      .select('clientes.id', 'id')
+      .addSelect('clientes.nombre', 'nombre')
+      .addSelect('clientes.cedula', 'cedula')
+      .addSelect('clientes.contacto', 'contacto')
+      .addSelect('COALESCE(SUM(venta.total), 0)', 'deuda')
+      .groupBy('clientes.id')
+      .getRawMany();
   }
 
   async getById(id: Clientes['id']) {
-    return await this.repository.findOneBy({ id });
+    return await this.repository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        ventas: {
+          detalles: {
+            producto: true,
+          },
+          abonos: true,
+        }
+      }, 
+      order: {
+        ventas: {
+          created_at: 'ASC'
+        },
+      }
+    });
   }
 
   async getByCedula(cedula: string) {

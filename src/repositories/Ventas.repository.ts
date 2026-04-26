@@ -33,7 +33,7 @@ class VentasRepository {
       estatus: data.estatus,
       jornada: data.jornada ?? undefined,
       cliente: data.cliente ?? undefined,
-      detalles_venta: data.detalles as DetallesVenta[],
+      detalles: data.detalles as DetallesVenta[],
     });
     return await repo.save(venta);
   }
@@ -48,7 +48,7 @@ class VentasRepository {
     }
     return await this.repository.find({
       where,
-      relations: ['cliente', 'detalles_venta'],
+      relations: ['cliente', 'detalles'],
       order: {
         created_at: 'DESC'
       },
@@ -61,9 +61,8 @@ class VentasRepository {
       where: { id: id },
       relations: [
         'cliente',
-        'jornada',
-        'detalles_venta',
-        'detalles_venta.producto',
+        'detalles',
+        'detalles.producto',
         'abonos'
       ],
       withDeleted: true
@@ -74,7 +73,7 @@ class VentasRepository {
     const resultado = await this.repository
       .createQueryBuilder("venta")
       .select("SUM(venta.total)", "sum")
-      .where("venta.estatus = :estatus", { estatus: 'PAGADA' })
+      .where("venta.estatus = :estatus", { estatus: 'CONTADO' })
       .andWhere("venta.created_at BETWEEN :desde AND :hasta", { desde, hasta })
       .getRawOne();
     return Number(resultado.sum || 0);
@@ -84,9 +83,9 @@ class VentasRepository {
     return await this.repository.find({
       where: {
         cliente: { id: cliente_id },
-        estatus: 'FIADA'
+        estatus: 'CREDITO'
       },
-      relations: ['detalles_venta', 'abonos'], 
+      relations: ['detalles', 'abonos'], 
       order: {
         created_at: 'ASC'
       }

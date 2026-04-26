@@ -50,7 +50,8 @@ class JornadasService {
         fondo_inicial: Number(jornada.fondo_inicial),
         ventas_efectivo: ventasHoy,
         total_esperado: Number(jornada.fondo_inicial) + ventasHoy,
-        abierta_desde: jornada.apertura
+        abierta_desde: jornada.apertura,
+        ventas: jornada.ventas
       }
     };
   }

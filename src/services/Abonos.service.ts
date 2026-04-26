@@ -17,17 +17,17 @@ class AbonosService {
 
     const venta = await this.ventasRepository.getById(data.venta_id);
     if (!venta) return { success: false, type: 'NOT_FOUND', message: `Venta con ID ${data.venta_id} no encontrada` };
-    if (venta.estatus === 'PAGADA') return { success: false, type: 'CONFLICT', message: `Venta con ID ${data.venta_id} se encuentra totalmente pagada` };
+    if (venta.estatus === 'CONTADO') return { success: false, type: 'CONFLICT', message: `Venta con ID ${data.venta_id} se encuentra totalmente CONTADO` };
     
     const abonosAnteriores = venta.abonos || [];
     const sumaAnteriores = abonosAnteriores.reduce((acumulado, abono) => acumulado + Number(abono.monto), 0);
     const totalPagado = sumaAnteriores + Number(data.monto);
 
     const totalVenta = Number(venta.total);
-    let estatus_venta: string = 'FIADA';
+    let estatus_venta: string = 'CREDITO';
     
     if (totalVenta > 0 && totalPagado >= totalVenta) {
-      estatus_venta = 'PAGADA';
+      estatus_venta = 'CONTADO';
     }
     
     const queryRunner = AppDataSource.createQueryRunner();
@@ -66,9 +66,9 @@ class AbonosService {
     const abonosRestantes = abonosActuales.filter(a => a.id !== abono.id);
     const sumaRestante = abonosRestantes.reduce((acumulado, a) => acumulado + Number(a.monto), 0);
 
-    let estatus_venta: string = 'FIADA';
+    let estatus_venta: string = 'CREDITO';
     if (sumaRestante >= Number(abono.venta.total)) {
-      estatus_venta = 'PAGADA';
+      estatus_venta = 'CONTADO';
     }
 
     const queryRunner = AppDataSource.createQueryRunner();

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Backend para la gestión de punto de venta y control de inventario. Administrar productos, clientes, ventas, abonos y jornadas de trabajo.
+  API RESTful para sistema POS y control de inventario. Gestiona la lógica de negocio y persistencia de datos para la administración de productos, clientes, transacciones de ventas, control de abonos y seguimiento de jornadas de trabajo.
 </p>
 
 
@@ -56,6 +56,7 @@
 | [bcrypt](https://github.com/kelektiv/node.bcrypt.js) | 6.x | Hashing seguro de contraseñas |
 | [Zod](https://zod.dev/) | 4.x | Validación y tipado de esquemas |
 | [cors](https://github.com/expressjs/cors) | 2.x | Manejo de Cross-Origin Resource Sharing |
+| [cookie-parser](https://github.com/expressjs/cookie-parser) | 1.x | Middleware para analizar cookies HTTP |
 | [helmet](https://github.com/helmetjs/helmet) | 8.x | Seguridad HTTP |
 | [express-rate-limit](https://github.com/expressjs/express-rate-limit) | 8.x | Rate limiting |
 | [pg](https://node-postgres.com/) | 8.x | Cliente PostgreSQL para Node.js |
@@ -234,7 +235,7 @@ El sistema cuenta con las siguientes entidades:
 | `id` | SERIAL | Identificador único |
 | `total` | DECIMAL(10,2) | Total de la venta |
 | `fecha` | TIMESTAMP | Fecha de la venta |
-| `estatus` | VARCHAR | Estado (FIADA, PAGADA) |
+| `estatus` | VARCHAR | Estado (CREDITO, CONTADO) |
 | `cliente_id` | INTEGER | FK → Clientes |
 | `jornada_id` | INTEGER | FK → Jornadas (nullable) |
 | `created_at` | TIMESTAMP | Fecha de creación |
@@ -247,6 +248,7 @@ El sistema cuenta con las siguientes entidades:
 | `id` | SERIAL | Identificador único |
 | `cantidad` | INTEGER | Cantidad del producto |
 | `precio_unitario` | DECIMAL(10,2) | Precio unitario |
+| `subtotal` | DECIMAL(10,2) | Subtotal por producto |
 | `venta_id` | INTEGER | FK → Ventas |
 | `producto_id` | INTEGER | FK → Productos |
 
@@ -368,22 +370,18 @@ El sistema cuenta con las siguientes entidades:
 
 ## Autenticación
 
-Todos los endpoints (excepto `/auth/set-admin`, `/auth/login` y  `/auth/refresh`) requieren el header de autorización
+El sistema utiliza **Cookies HttpOnly** para el manejo de sesiones, lo que significa que el frontend no necesita (ni puede) manipular los tokens directamente.
 
-```
-Authorization: Bearer <access_token>
-```
-
-El **access token** expira en **15 minutos**. Usa el **refresh token** para obtener uno nuevo mediante el endpoint `/auth/refresh`.
-
-
+Todos los endpoints (excepto `/auth/set-admin` y `/auth/login`) requieren estar autenticado.
 
 ### Flujo de autenticación
 
-1. **Login:** `POST /auth/login` → recibe `accessToken` y `refreshToken`
-2. **Acceso:** usa `accessToken` en el header `Authorization: Bearer <token>`
-3. **Refresh:** cuando el access token expire, usa `POST /auth/refresh` con el refresh token para obtener uno nuevo
-4. **Logout:** `POST /auth/logout` para cerrar sesión
+1. **Login:** Al hacer `POST /auth/login` con credenciales válidas, el servidor responde configurando automáticamente dos cookies seguras en el navegador:
+  - `accessToken` (Expira en 15 minutos)
+  - `refreshToken` (Expira en 7 días)
+2. **Acceso:** En las siguientes peticiones a rutas protegidas, el navegador enviará estas cookies automáticamente. **Importante:** El frontend debe tener configurada la opción `credentials: 'include'` (en fetch) o `withCredentials: true` (en axios) para que las cookies viajen en las peticiones CORS.
+3. **Refresh:** Cuando el access token expire, el frontend debe hacer una petición a `POST /auth/refresh`. El servidor leerá la cookie del `refreshToken` y, si es válida, adjuntará una nueva cookie con un `accessToken` fresco.
+4. **Logout:** Al hacer `POST /auth/logout`, el servidor invalida la sesión limpiando (borrando) ambas cookies del navegador.
 
 
 

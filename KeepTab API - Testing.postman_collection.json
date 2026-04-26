@@ -18,14 +18,7 @@
     }
   ],
   "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{token}}",
-        "type": "string"
-      }
-    ]
+    "type": "noauth"
   },
   "item": [
     {
@@ -79,17 +72,7 @@
           "name": "POST /auth/login",
           "event": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const res = pm.response.json();",
-                  "    pm.collectionVariables.set(\"token\", res.data.accessToken);",
-                  "    pm.collectionVariables.set(\"refreshToken\", res.data.refreshToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
+              "listen": "test"
             }
           ],
           "request": {
@@ -118,17 +101,7 @@
           "name": "POST /auth/refresh",
           "event": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const res = pm.response.json();",
-                  "    pm.collectionVariables.set(\"token\", res.data.accessToken);",
-                  "    pm.collectionVariables.set(\"refreshToken\", res.data.refreshToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
+              "listen": "test"
             }
           ],
           "request": {
@@ -138,10 +111,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
-              "options": {
-                "raw": { "language": "json" }
-              }
+              "raw": "{}" 
             },
             "url": {
               "raw": "{{baseUrl}}/auth/refresh",
@@ -493,7 +463,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"cliente_id\": 1,\n    \"estatus\": \"FIADA\",\n    \"detalles\": [\n        {\n            \"producto_id\": 1,\n            \"cantidad\": 10\n        }\n    ]\n}",
+              "raw": "{\n    \"cliente_id\": 1,\n    \"estatus\": \"CREDITO\",\n    \"detalles\": [\n        {\n            \"producto_id\": 1,\n            \"cantidad\": 10\n        }\n    ]\n}",
               "options": {
                 "raw": { "language": "json" }
               }

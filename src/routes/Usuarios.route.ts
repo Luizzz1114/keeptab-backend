@@ -1,12 +1,10 @@
 import { Router } from 'express';
-import { authenticate, isAdmin } from '../middlewares/auth.middleware';
+import {isAdmin } from '../middlewares/auth.middleware';
 import { validateBody, validateId } from '../middlewares/validator.middleware';
 import { createUsuarioSchema, updateUsuarioSchema } from '../schemas/Usuarios.dto';
 import UsuariosController from '../controllers/Usuarios.controller';
 
 const UsuariosRouter: Router = Router();
-
-UsuariosRouter.use(authenticate);
 
 UsuariosRouter.get('/me', UsuariosController.getMe);
 

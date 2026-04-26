@@ -1,12 +1,9 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/auth.middleware';
 import { validateBody, validateId } from '../middlewares/validator.middleware';
 import { createVentaSchema } from '../schemas/Ventas.dto';
 import VentasController from '../controllers/Ventas.controller';
 
 const VentasRouter: Router = Router();
-
-VentasRouter.use(authenticate);
 
 VentasRouter.route('/')
   .get(VentasController.getAll)

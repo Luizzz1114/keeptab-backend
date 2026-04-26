@@ -42,7 +42,7 @@ class AuthService {
     if (!passwordValida) return { success: false, type: 'UNAUTHORIZED', message: 'Credenciales inválidas' };
 
     const accessToken = jwt.sign(
-      { id: usuario.id, username: usuario.username },
+      { id: usuario.id, username: usuario.username, rol: usuario.rol },
       process.env.JWT_ACCESS_SECRET as string,
       { expiresIn: '15m' }
     );
@@ -57,7 +57,14 @@ class AuthService {
 
     try {
       await this.repository.update(usuario);
-      return { success: true, data: { accessToken, refreshToken, usuario: { id: usuario.id, username: usuario.username } } };
+      return { 
+        success: true, 
+        data: { 
+          accessToken, 
+          refreshToken, 
+          usuario: { id: usuario.id, username: usuario.username, rol: usuario.rol } 
+        } 
+      };
     } catch (error) {
       return { success: false, type: 'DB_ERROR' };
     }
@@ -65,11 +72,11 @@ class AuthService {
 
   async refresh(usuario: any, tokenRecibido: string) {
     if (usuario.refreshToken !== tokenRecibido) {
-      return { success: false, type: 'FORBIDDEN', message: 'Refresh token inválido o revocado' };
+      return { success: false, type: 'FORBIDDEN', message: 'Sesión inválida o expirada' };
     }
 
     const nuevoAccessToken = jwt.sign(
-      { id: usuario.id, username: usuario.username },
+      { id: usuario.id, username: usuario.username, rol: usuario.rol },
       process.env.JWT_ACCESS_SECRET as string,
       { expiresIn: '15m' }
     );

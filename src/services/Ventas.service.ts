@@ -123,7 +123,7 @@ class VentasService {
     }
 
     const productosUpdate = [];
-    for (const detalle of venta.detalles_venta) {
+    for (const detalle of venta.detalles) {
       if (detalle.producto && detalle.producto.conteo) {
         detalle.producto.stock += detalle.cantidad;
         productosUpdate.push(detalle.producto);

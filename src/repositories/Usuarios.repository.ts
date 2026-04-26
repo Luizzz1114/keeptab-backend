@@ -17,7 +17,11 @@ class UsuariosRepository {
 
   async getAll() {
     return await this.repository.find({
-      select: ['id', 'username', 'rol', 'created_at', 'updated_at']
+      select: {
+        id: true,
+        username: true,
+        rol: true
+      }
     });
   }
 
@@ -28,7 +32,12 @@ class UsuariosRepository {
   async getByUsername(username: string) {
     return await this.repository.findOne({
       where: { username: username },
-      withDeleted: true
+      withDeleted: true,
+      select: {
+        id: true,
+        username: true,
+        rol: true
+      }
     });
   }
 
