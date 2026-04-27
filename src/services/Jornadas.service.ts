@@ -38,22 +38,25 @@ class JornadasService {
 
   async getEstadoActual() {
     const jornada = await this.jornadasRepository.getJornadaAbierta();
-    if (!jornada) return { success: false, type: 'NOT_FOUND', message: 'No hay ninguna jornada abierta actualmente' };
-    
+    if (!jornada) return { success: true, message: 'No hay ninguna jornada abierta actualmente', data: null };
+
     const ahora = new Date();
-    const ventasHoy = await this.ventasRepository.getSumVentasPagadas(jornada.apertura, ahora);
-    
-    return {
-      success: true,
-      data: {
-        id: jornada.id,
-        fondo_inicial: Number(jornada.fondo_inicial),
-        ventas_efectivo: ventasHoy,
-        total_esperado: Number(jornada.fondo_inicial) + ventasHoy,
-        abierta_desde: jornada.apertura,
-        ventas: jornada.ventas
-      }
-    };
+    try {
+      const ventasHoy = await this.ventasRepository.getSumVentasPagadas(jornada.apertura, ahora);
+      return {
+        success: true,
+        data: {
+          id: jornada.id,
+          fondo_inicial: Number(jornada.fondo_inicial),
+          ventas_efectivo: ventasHoy,
+          total_esperado: Number(jornada.fondo_inicial) + ventasHoy,
+          abierta_desde: jornada.apertura,
+          ventas: jornada.ventas
+        }
+      };
+    } catch (error) {
+      return { success: false, type: 'DB_ERROR' };
+    }
   }
 
   async cerrar(id: number, data: CerrarJornadaDTO) {
