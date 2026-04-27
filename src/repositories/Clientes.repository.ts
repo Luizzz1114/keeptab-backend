@@ -19,12 +19,16 @@ class ClientesRepository {
   async getAll() {
     return await this.repository.createQueryBuilder('clientes')
       .leftJoin('clientes.ventas', 'venta', 'venta.estatus = :estatus', { estatus: 'CREDITO' })
+      .leftJoin('venta.abonos', 'abono')
       .select('clientes.id', 'id')
       .addSelect('clientes.nombre', 'nombre')
       .addSelect('clientes.cedula', 'cedula')
       .addSelect('clientes.contacto', 'contacto')
-      .addSelect('COALESCE(SUM(venta.total), 0)', 'deuda')
+      .addSelect(`COALESCE(SUM(DISTINCT venta.total), 0) - COALESCE(SUM(abono.monto), 0)`, 'deuda')
       .groupBy('clientes.id')
+      .addGroupBy('clientes.nombre')
+      .addGroupBy('clientes.cedula')
+      .addGroupBy('clientes.contacto')
       .getRawMany();
   }
 
