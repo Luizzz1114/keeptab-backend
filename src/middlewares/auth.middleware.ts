@@ -31,7 +31,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       return sendError(res, 'UNAUTHORIZED', 'Token de acceso inválido');
     }
   } catch (error) {
-    return sendError(res, 'FORBIDDEN', 'Token de acceso inválido o expirado');
+    return sendError(res, 'UNAUTHORIZED', 'Token de acceso inválido o expirado');
   }
 };
 
