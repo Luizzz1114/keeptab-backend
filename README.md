@@ -5,14 +5,15 @@
   <img src="https://img.shields.io/badge/Express-5.x-000000?logo=express&logoColor=white" alt="Express" />
   <img src="https://img.shields.io/badge/PostgreSQL-14+-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Zod-4.x-3E67B8?logoColor=white" alt="Zod" />
+  <img src="https://img.shields.io/badge/TypeORM-0.3.x-FF6B6B?logoColor=white" alt="TypeORM" />
 </p>
 
 <p align="center">
   API RESTful para sistema POS y control de inventario. Gestiona la lógica de negocio y persistencia de datos para la administración de productos, clientes, transacciones de ventas, control de abonos y seguimiento de jornadas de trabajo.
 </p>
 
-
+> [!IMPORTANT]
+> Este proyecto forma parte del ecosistema **KeepTab**, que incluye el [Frontend](https://github.com/Luizzz1114/keeptab-frontend) y el [Backend](https://github.com/Luizzz1114/keeptab-backend).
 
 ## Tabla de Contenidos
 
@@ -25,10 +26,9 @@
 - [Base de Datos](#base-de-datos)
 - [Modelo de Datos](#modelo-de-datos)
 - [API REST - Referencia de Endpoints](#api-rest---referencia-de-endpoints)
+- [Autenticación](#autenticación)
 - [Scripts Disponibles](#scripts-disponibles)
 - [Autor](#autor)
-
-
 
 ## Características Principales
 
@@ -41,29 +41,27 @@
 - **Autenticación JWT** — seguridad con Access tokens (15 min) y Refresh tokens (7 días)
 - **Rate Limiting** — protección contra abusos en endpoints de autenticación
 - **Validación con Zod** — validación robusta de datos de entrada en backend
-
-
+- **Seguridad HTTP** — headers de seguridad con Helmet
+- **CORS** — configuración flexible de orígenes permitidos
 
 ## Tecnologías
 
-| Tecnología | Versión | Propósito |
-|---|---|---|
-| [Node.js](https://nodejs.org/) | 18+ | Entorno de ejecución JavaScript |
-| [Express](https://expressjs.com/) | 5.x | Framework web HTTP |
-| [TypeORM](https://typeorm.io/) | 0.3.x | ORM para PostgreSQL |
-| [PostgreSQL](https://www.postgresql.org/) | 14+ | Base de datos relacional |
-| [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) | 9.x | Generación y verificación de tokens JWT |
-| [bcrypt](https://github.com/kelektiv/node.bcrypt.js) | 6.x | Hashing seguro de contraseñas |
-| [Zod](https://zod.dev/) | 4.x | Validación y tipado de esquemas |
-| [cors](https://github.com/expressjs/cors) | 2.x | Manejo de Cross-Origin Resource Sharing |
-| [cookie-parser](https://github.com/expressjs/cookie-parser) | 1.x | Middleware para analizar cookies HTTP |
-| [helmet](https://github.com/helmetjs/helmet) | 8.x | Seguridad HTTP |
-| [express-rate-limit](https://github.com/expressjs/express-rate-limit) | 8.x | Rate limiting |
-| [pg](https://node-postgres.com/) | 8.x | Cliente PostgreSQL para Node.js |
-| [dotenv](https://github.com/motdotla/dotenv) | 17.x | Carga de variables de entorno |
-| [nodemon](https://nodemon.io/) | 3.x | Recarga automática en desarrollo |
-
-
+| Tecnología                                                            | Versión | Propósito                               |
+| --------------------------------------------------------------------- | ------- | --------------------------------------- |
+| [Node.js](https://nodejs.org/)                                        | 18+     | Entorno de ejecución JavaScript         |
+| [Express](https://expressjs.com/)                                     | 5.x     | Framework web HTTP                      |
+| [TypeORM](https://typeorm.io/)                                        | 0.3.x   | ORM para PostgreSQL                     |
+| [PostgreSQL](https://www.postgresql.org/)                             | 14+     | Base de datos relacional                |
+| [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)            | 9.x     | Generación y verificación de tokens JWT |
+| [bcrypt](https://github.com/kelektiv/node.bcrypt.js)                  | 6.x     | Hashing seguro de contraseñas           |
+| [Zod](https://zod.dev/)                                               | 4.x     | Validación y tipado de esquemas         |
+| [cors](https://github.com/expressjs/cors)                             | 2.x     | Manejo de Cross-Origin Resource Sharing |
+| [cookie-parser](https://github.com/expressjs/cookie-parser)           | 1.x     | Middleware para analizar cookies HTTP   |
+| [helmet](https://github.com/helmetjs/helmet)                          | 8.x     | Seguridad HTTP                          |
+| [express-rate-limit](https://github.com/expressjs/express-rate-limit) | 8.x     | Rate limiting                           |
+| [pg](https://node-postgres.com/)                                      | 8.x     | Cliente PostgreSQL para Node.js         |
+| [dotenv](https://github.com/motdotla/dotenv)                          | 17.x    | Carga de variables de entorno           |
+| [nodemon](https://nodemon.io/)                                        | 3.x     | Recarga automática en desarrollo        |
 
 ## Arquitectura del Proyecto
 
@@ -71,36 +69,36 @@ El backend sigue una arquitectura en **3 capas** (Controller → Service → Rep
 
 ```text
 keeptab-backend/             # Backend — Express 5 + TypeORM + PostgreSQL
-│                   
+│
 ├── src/
 │   ├── config/              # Conexión a la base de datos
 │   ├── controllers/         # Controladores HTTP (1 por entidad)
-│   ├── middlewares/         # Capa de seguridad (JWT, rate limiting)
+│   ├── middlewares/         # Capa de seguridad (JWT, rate limiting, validación)
 │   ├── models/              # Entidades de TypeORM
 │   ├── repositories/        # Capa de acceso a datos
 │   ├── routes/              # Definición de rutas Express
-│   ├── schemas/             # DTOs con Zod
+│   ├── schemas/             # DTOs con Zod para validación
 │   ├── services/            # Lógica de negocio
+│   ├── utils/               # Utilidades y helpers
+│   ├── app.ts               # Configuración de la aplicación
 │   └── index.ts             # Punto de entrada
 ├── package.json
 ├── tsconfig.json
-├── .gitignore
 └── README.md
 ```
-
-
 
 ## Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
-| Herramienta | Versión mínima | Descarga |
-|---|---|---|
-| Node.js | 18.x | [nodejs.org](https://nodejs.org/) |
-| pnpm | 10.x | [pnpm.io](https://pnpm.io/) |
-| PostgreSQL | 14.x | [postgresql.org/download](https://www.postgresql.org/download/) |
+| Herramienta | Versión mínima | Descarga                                                        |
+| ----------- | -------------- | --------------------------------------------------------------- |
+| Node.js     | 18.x           | [nodejs.org](https://nodejs.org/)                               |
+| pnpm        | 10.x           | [pnpm.io](https://pnpm.io/)                                     |
+| PostgreSQL  | 14.x           | [postgresql.org/download](https://www.postgresql.org/download/) |
 
-
+> [!IMPORTANT]
+> El frontend debe estar ejecutándose en `http://localhost:5173` para que funcione correctamente con la configuración CORS por defecto. Consulta la documentación del [Frontend](https://github.com/Luizzz1114/keeptab-frontend) para más información.
 
 ## Instalación y Configuración
 
@@ -140,19 +138,17 @@ JWT_REFRESH_SECRET=otra_clave_secreta_larga_y_segura
 CORS_ORIGIN=http://localhost:5173
 ```
 
-| Variable | Descripción |
-|---|---|
-| `PG_HOST` | Host del servidor de base de datos |
-| `PG_PORT` | Puerto de PostgreSQL (por defecto `5432`) |
-| `PG_USER` | Usuario de PostgreSQL |
-| `PG_PASSWORD` | Contraseña del usuario de PostgreSQL |
-| `PG_DATABASE` | Nombre de la base de datos |
-| `PORT` | Puerto donde se ejecutará el servidor Express (por defecto `3000`) |
-| `JWT_ACCESS_SECRET` | Clave secreta para firmar access tokens (15 min de duración) |
-| `JWT_REFRESH_SECRET` | Clave secreta para firmar refresh tokens (7 días de duración) |
-| `CORS_ORIGIN` | Origen permitido para CORS |
-
-
+| Variable             | Descripción                                       | Por defecto             |
+| -------------------- | ------------------------------------------------- | ----------------------- |
+| `PG_HOST`            | Host del servidor de base de datos                | `localhost`             |
+| `PG_PORT`            | Puerto de PostgreSQL                              | `5432`                  |
+| `PG_USER`            | Usuario de PostgreSQL                             | `postgres`              |
+| `PG_PASSWORD`        | Contraseña del usuario de PostgreSQL              | —                       |
+| `PG_DATABASE`        | Nombre de la base de datos                        | `keeptab`               |
+| `PORT`               | Puerto donde se ejecutará el servidor Express     | `3000`                  |
+| `JWT_ACCESS_SECRET`  | Clave secreta para firmar access tokens (15 min)  | —                       |
+| `JWT_REFRESH_SECRET` | Clave secreta para firmar refresh tokens (7 días) | —                       |
+| `CORS_ORIGIN`        | Origen permitido para CORS (separados por coma)   | `http://localhost:5173` |
 
 ## Ejecución
 
@@ -164,7 +160,7 @@ Inicia el servidor con recarga automática para desarrollo:
 pnpm dev
 ```
 
-> [!NOTE]
+> [!TIP]
 > El servidor estará disponible en `http://localhost:3000/keeptab-api`
 
 ### Modo producción
@@ -178,8 +174,6 @@ pnpm start
 
 > [!IMPORTANT]
 > Asegúrate de que tu base de datos PostgreSQL esté activa y de tener tu archivo `.env` configurado correctamente antes de iniciar el servidor en entorno de producción.
-
-
 
 ## Base de Datos
 
@@ -199,98 +193,95 @@ El sistema cuenta con las siguientes entidades:
 - `Jornadas` — Control de jornadas de trabajo
 - `Usuarios` — Cuentas de acceso al sistema
 
-
-
 ## Modelo de Datos
 
 ### 1. Productos
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `nombre` | VARCHAR | Nombre del producto |
-| `precio` | DECIMAL(10,2) | Precio del producto |
-| `conteo` | BOOLEAN | Control de inventario por unidad |
-| `stock` | INTEGER | Cantidad en bodega |
-| `created_at` | TIMESTAMP | Fecha de creación |
-| `updated_at` | TIMESTAMP | Fecha de última actualización |
-| `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
+| Campo        | Tipo          | Descripción                      |
+| ------------ | ------------- | -------------------------------- |
+| `id`         | SERIAL        | Identificador único              |
+| `nombre`     | VARCHAR       | Nombre del producto              |
+| `categoria`  | VARCHAR       | Categoría del producto           |
+| `precio`     | DECIMAL(10,2) | Precio del producto              |
+| `conteo`     | BOOLEAN       | Control de inventario por unidad |
+| `stock`      | INTEGER       | Cantidad en bodega               |
+| `created_at` | TIMESTAMP     | Fecha de creación                |
+| `updated_at` | TIMESTAMP     | Fecha de última actualización    |
+| `deleted_at` | TIMESTAMP     | Fecha de eliminación lógica      |
 
 ### 2. Clientes
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `cedula` | VARCHAR | Cédula de identidad |
-| `nombre` | VARCHAR | Nombre completo |
-| `contacto` | VARCHAR | Número de teléfono |
-| `created_at` | TIMESTAMP | Fecha de creación |
+| Campo        | Tipo      | Descripción                   |
+| ------------ | --------- | ----------------------------- |
+| `id`         | SERIAL    | Identificador único           |
+| `cedula`     | VARCHAR   | Cédula de identidad           |
+| `nombre`     | VARCHAR   | Nombre completo               |
+| `contacto`   | VARCHAR   | Número de teléfono            |
+| `created_at` | TIMESTAMP | Fecha de creación             |
 | `updated_at` | TIMESTAMP | Fecha de última actualización |
-| `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
+| `deleted_at` | TIMESTAMP | Fecha de eliminación lógica   |
 
 ### 3. Ventas
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `total` | DECIMAL(10,2) | Total de la venta |
-| `fecha` | TIMESTAMP | Fecha de la venta |
-| `estatus` | VARCHAR | Estado (CREDITO, CONTADO) |
-| `cliente_id` | INTEGER | FK → Clientes |
-| `jornada_id` | INTEGER | FK → Jornadas (nullable) |
-| `created_at` | TIMESTAMP | Fecha de creación |
-| `updated_at` | TIMESTAMP | Fecha de última actualización |
+| Campo        | Tipo          | Descripción                   |
+| ------------ | ------------- | ----------------------------- |
+| `id`         | SERIAL        | Identificador único           |
+| `total`      | DECIMAL(10,2) | Total de la venta             |
+| `fecha`      | TIMESTAMP     | Fecha de la venta             |
+| `estatus`    | VARCHAR       | Estado (CREDITO, CONTADO)     |
+| `cliente_id` | INTEGER       | FK → Clientes                 |
+| `jornada_id` | INTEGER       | FK → Jornadas (nullable)      |
+| `created_at` | TIMESTAMP     | Fecha de creación             |
+| `updated_at` | TIMESTAMP     | Fecha de última actualización |
 
 ### 4. DetallesVenta
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `cantidad` | INTEGER | Cantidad del producto |
-| `precio_unitario` | DECIMAL(10,2) | Precio unitario |
-| `subtotal` | DECIMAL(10,2) | Subtotal por producto |
-| `venta_id` | INTEGER | FK → Ventas |
-| `producto_id` | INTEGER | FK → Productos |
+| Campo             | Tipo          | Descripción           |
+| ----------------- | ------------- | --------------------- |
+| `id`              | SERIAL        | Identificador único   |
+| `cantidad`        | INTEGER       | Cantidad del producto |
+| `precio_unitario` | DECIMAL(10,2) | Precio unitario       |
+| `subtotal`        | DECIMAL(10,2) | Subtotal por producto |
+| `venta_id`        | INTEGER       | FK → Ventas           |
+| `producto_id`     | INTEGER       | FK → Productos        |
 
 ### 5. Abonos
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `monto` | DECIMAL(10,2) | Monto del abono |
-| `fecha` | TIMESTAMP | Fecha del abono |
-| `venta_id` | INTEGER | FK → Ventas |
-| `created_at` | TIMESTAMP | Fecha de creación |
+| Campo        | Tipo          | Descripción         |
+| ------------ | ------------- | ------------------- |
+| `id`         | SERIAL        | Identificador único |
+| `monto`      | DECIMAL(10,2) | Monto del abono     |
+| `fecha`      | TIMESTAMP     | Fecha del abono     |
+| `venta_id`   | INTEGER       | FK → Ventas         |
+| `created_at` | TIMESTAMP     | Fecha de creación   |
 
 ### 6. Jornadas
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `apertura` | TIMESTAMP | Fecha y hora de apertura |
-| `cierre` | TIMESTAMP | Fecha y hora de cierre |
-| `fondo_inicial` | DECIMAL(10,2) | Monto del fondo inicial |
-| `estatus` | VARCHAR | Estado (ABIERTA, CERRADA) |
-| `total_ventas` | DECIMAL(10,2) | Total de ventas del día |
-| `total_fisico` | DECIMAL(10,2) | Total físico en caja |
-| `diferencia` | DECIMAL(10,2) | Diferencia entre físico y esperado |
-| `created_at` | TIMESTAMP | Fecha de creación |
-| `updated_at` | TIMESTAMP | Fecha de última actualización |
+| Campo           | Tipo          | Descripción                        |
+| --------------- | ------------- | ---------------------------------- |
+| `id`            | SERIAL        | Identificador único                |
+| `apertura`      | TIMESTAMP     | Fecha y hora de apertura           |
+| `cierre`        | TIMESTAMP     | Fecha y hora de cierre             |
+| `fondo_inicial` | DECIMAL(10,2) | Monto del fondo inicial            |
+| `estatus`       | VARCHAR       | Estado (ABIERTA, CERRADA)          |
+| `total_ventas`  | DECIMAL(10,2) | Total de ventas del día            |
+| `total_fisico`  | DECIMAL(10,2) | Total físico en caja               |
+| `diferencia`    | DECIMAL(10,2) | Diferencia entre físico y esperado |
+| `created_at`    | TIMESTAMP     | Fecha de creación                  |
+| `updated_at`    | TIMESTAMP     | Fecha de última actualización      |
 
 ### 7. Usuarios
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | SERIAL | Identificador único |
-| `username` | VARCHAR | Nombre de usuario único |
-| `rol` | VARCHAR | Rol del usuario (USER, ADMIN) |
-| `passwordHash` | VARCHAR | Hash de contraseña |
-| `refreshToken` | VARCHAR | Token de actualización (opcional) |
-| `created_at` | TIMESTAMP | Fecha de creación |
-| `updated_at` | TIMESTAMP | Fecha de última actualización |
-| `deleted_at` | TIMESTAMP | Fecha de eliminación lógica |
-
-
+| Campo          | Tipo      | Descripción                       |
+| -------------- | --------- | --------------------------------- |
+| `id`           | SERIAL    | Identificador único               |
+| `username`     | VARCHAR   | Nombre de usuario único           |
+| `rol`          | VARCHAR   | Rol del usuario (USER, ADMIN)     |
+| `passwordHash` | VARCHAR   | Hash de contraseña                |
+| `refreshToken` | VARCHAR   | Token de actualización (opcional) |
+| `created_at`   | TIMESTAMP | Fecha de creación                 |
+| `updated_at`   | TIMESTAMP | Fecha de última actualización     |
+| `deleted_at`   | TIMESTAMP | Fecha de eliminación lógica       |
 
 ## API REST - Referencia de Endpoints
 
@@ -298,75 +289,73 @@ El sistema cuenta con las siguientes entidades:
 
 ### Autenticación (`/auth`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `POST` | `/auth/set-admin` | Crear primer usuario administrador (Setup) | No |
-| `POST` | `/auth/login` | Iniciar sesión — devuelve access y refresh token | No |
-| `POST` | `/auth/refresh` | Renovar access token | Sí (Refesh Token) |
-| `POST` | `/auth/logout` | Cerrar sesión | Sí |
+| Método | Ruta              | Descripción                                      | Autenticación      |
+| ------ | ----------------- | ------------------------------------------------ | ------------------ |
+| `POST` | `/auth/set-admin` | Crear primer usuario administrador (Setup)       | No                 |
+| `POST` | `/auth/login`     | Iniciar sesión — devuelve access y refresh token | No                 |
+| `POST` | `/auth/refresh`   | Renovar access token                             | Sí (Refresh Token) |
+| `POST` | `/auth/logout`    | Cerrar sesión                                    | Sí                 |
 
 ### Productos (`/productos`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `GET` | `/productos` | Listar todos los productos | Sí |
-| `GET` | `/productos/:id` | Obtener producto por ID | Sí |
-| `POST` | `/productos` | Crear nuevo producto | Sí |
-| `PATCH` | `/productos/:id` | Actualizar producto | Sí |
-| `DELETE` | `/productos/:id` | Eliminar producto | Sí |
+| Método   | Ruta             | Descripción                | Autenticación |
+| -------- | ---------------- | -------------------------- | ------------- |
+| `GET`    | `/productos`     | Listar todos los productos | Sí            |
+| `GET`    | `/productos/:id` | Obtener producto por ID    | Sí            |
+| `POST`   | `/productos`     | Crear nuevo producto       | Sí            |
+| `PATCH`  | `/productos/:id` | Actualizar producto        | Sí            |
+| `DELETE` | `/productos/:id` | Eliminar producto          | Sí            |
 
 ### Clientes (`/clientes`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `GET` | `/clientes` | Listar todos los clientes | Sí |
-| `GET` | `/clientes/:id` | Obtener cliente por ID | Sí |
-| `GET` | `/clientes/:id/deudas` | Obtener deudas de un cliente | Sí |
-| `POST` | `/clientes` | Crear nuevo cliente | Sí |
-| `PATCH` | `/clientes/:id` | Actualizar cliente | Sí |
-| `DELETE` | `/clientes/:id` | Eliminar cliente | Sí |
+| Método   | Ruta                   | Descripción                  | Autenticación |
+| -------- | ---------------------- | ---------------------------- | ------------- |
+| `GET`    | `/clientes`            | Listar todos los clientes    | Sí            |
+| `GET`    | `/clientes/:id`        | Obtener cliente por ID       | Sí            |
+| `GET`    | `/clientes/:id/deudas` | Obtener deudas de un cliente | Sí            |
+| `POST`   | `/clientes`            | Crear nuevo cliente          | Sí            |
+| `PATCH`  | `/clientes/:id`        | Actualizar cliente           | Sí            |
+| `DELETE` | `/clientes/:id`        | Eliminar cliente             | Sí            |
 
 ### Ventas (`/ventas`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `GET` | `/ventas` | Listar todas las ventas | Sí |
-| `GET` | `/ventas/:id` | Obtener venta por ID | Sí |
-| `POST` | `/ventas` | Crear nueva venta | Sí |
-| `DELETE` | `/ventas/:id` | Eliminar venta | Sí |
+| Método   | Ruta          | Descripción             | Autenticación |
+| -------- | ------------- | ----------------------- | ------------- |
+| `GET`    | `/ventas`     | Listar todas las ventas | Sí            |
+| `GET`    | `/ventas/:id` | Obtener venta por ID    | Sí            |
+| `POST`   | `/ventas`     | Crear nueva venta       | Sí            |
+| `DELETE` | `/ventas/:id` | Eliminar venta          | Sí            |
 
 ### Abonos (`/abonos`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `GET` | `/abonos` | Listar todos los abonos | Sí |
-| `GET` | `/abonos/:id` | Obtener abono por ID | Sí |
-| `POST` | `/abonos` | Registrar abono | Sí |
-| `DELETE` | `/abonos/:id` | Eliminar abono | Sí |
+| Método   | Ruta          | Descripción             | Autenticación |
+| -------- | ------------- | ----------------------- | ------------- |
+| `GET`    | `/abonos`     | Listar todos los abonos | Sí            |
+| `GET`    | `/abonos/:id` | Obtener abono por ID    | Sí            |
+| `POST`   | `/abonos`     | Registrar abono         | Sí            |
+| `DELETE` | `/abonos/:id` | Eliminar abono          | Sí            |
 
 ### Jornadas (`/jornadas`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `GET` | `/jornadas` | Listar todas las jornadas | Sí |
-| `GET` | `/jornadas/actual` | Obtener jornada actual | Sí |
-| `GET` | `/jornadas/:id` | Obtener jornada por ID | Sí |
-| `POST` | `/jornadas/abrir` | Registrar y abrir jornada | Sí (ADMIN) |
-| `PATCH` | `/jornadas/:id/cerrar` | Cerrar jornada | Sí (ADMIN) |
-| `DELETE` | `/jornadas/:id` | Eliminar jornada | Sí (ADMIN) |
+| Método   | Ruta                   | Descripción               | Autenticación |
+| -------- | ---------------------- | ------------------------- | ------------- |
+| `GET`    | `/jornadas`            | Listar todas las jornadas | Sí            |
+| `GET`    | `/jornadas/actual`     | Obtener jornada actual    | Sí            |
+| `GET`    | `/jornadas/:id`        | Obtener jornada por ID    | Sí            |
+| `POST`   | `/jornadas/abrir`      | Registrar y abrir jornada | Sí (ADMIN)    |
+| `PATCH`  | `/jornadas/:id/cerrar` | Cerrar jornada            | Sí (ADMIN)    |
+| `DELETE` | `/jornadas/:id`        | Eliminar jornada          | Sí (ADMIN)    |
 
 ### Usuarios (`/usuarios`)
 
-| Método | Ruta | Descripción | Autenticación |
-|---|---|---|---|
-| `GET` | `/usuarios/me` | Obtener usuario actual (perfil) | Sí |
-| `GET` | `/usuarios` | Listar todos los usuarios | Sí (ADMIN) |
-| `GET` | `/usuarios/:id` | Obtener usuario por ID | Sí (ADMIN) |
-| `POST` | `/usuarios` | Crear nuevo usuario | Sí (ADMIN) |
-| `PATCH` | `/usuarios/:id` | Actualizar usuario | Sí (ADMIN) |
-| `DELETE` | `/usuarios/:id` | Eliminar usuario | Sí (ADMIN) |
-
-
+| Método   | Ruta            | Descripción                     | Autenticación |
+| -------- | --------------- | ------------------------------- | ------------- |
+| `GET`    | `/usuarios/me`  | Obtener usuario actual (perfil) | Sí            |
+| `GET`    | `/usuarios`     | Listar todos los usuarios       | Sí (ADMIN)    |
+| `GET`    | `/usuarios/:id` | Obtener usuario por ID          | Sí (ADMIN)    |
+| `POST`   | `/usuarios`     | Crear nuevo usuario             | Sí (ADMIN)    |
+| `PATCH`  | `/usuarios/:id` | Actualizar usuario              | Sí (ADMIN)    |
+| `DELETE` | `/usuarios/:id` | Eliminar usuario                | Sí (ADMIN)    |
 
 ## Autenticación
 
@@ -376,24 +365,30 @@ Todos los endpoints (excepto `/auth/set-admin` y `/auth/login`) requieren estar 
 
 ### Flujo de autenticación
 
-1. **Login:** Al hacer `POST /auth/login` con credenciales válidas, el servidor responde configurando automáticamente dos cookies seguras en el navegador:
-  - `accessToken` (Expira en 15 minutos)
-  - `refreshToken` (Expira en 7 días)
-2. **Acceso:** En las siguientes peticiones a rutas protegidas, el navegador enviará estas cookies automáticamente. **Importante:** El frontend debe tener configurada la opción `credentials: 'include'` (en fetch) o `withCredentials: true` (en axios) para que las cookies viajen en las peticiones CORS.
-3. **Refresh:** Cuando el access token expire, el frontend debe hacer una petición a `POST /auth/refresh`. El servidor leerá la cookie del `refreshToken` y, si es válida, adjuntará una nueva cookie con un `accessToken` fresco.
-4. **Logout:** Al hacer `POST /auth/logout`, el servidor invalida la sesión limpiando (borrando) ambas cookies del navegador.
+1. **Setup:** Al inicializar el sistema, usa `POST /auth/set-admin` para crear el primer usuario administrador.
+2. **Login:** Al hacer `POST /auth/login` con credenciales válidas, el servidor responde configurando automáticamente dos cookies seguras en el navegador:
+   - `accessToken` (Expira en 15 minutos)
+   - `refreshToken` (Expira en 7 días)
+3. **Acceso:** En las siguientes peticiones a rutas protegidas, el navegador enviará estas cookies automáticamente. **Importante:** El frontend debe tener configurada la opción `credentials: 'include'` (en fetch) o `withCredentials: true` (en axios) para que las cookies viajen en las peticiones CORS.
+4. **Refresh:** Cuando el access token expire, el frontend debe hacer una petición a `POST /auth/refresh`. El servidor leerá la cookie del `refreshToken` y, si es válida, adjuntará una nueva cookie con un `accessToken` fresco.
+5. **Logout:** Al hacer `POST /auth/logout`, el servidor invalida la sesión limpiando (borrando) ambas cookies del navegador.
 
+### Control de Acceso (RBAC)
 
+El sistema implementa control de acceso basado en roles:
+
+| Rol       | Permisos                                                                               |
+| --------- | -------------------------------------------------------------------------------------- |
+| **ADMIN** | Acceso completo a todas las funcionalidades, incluyendo gestión de usuarios y jornadas |
+| **USER**  | Acceso al mostrador, productos, clientes, ventas, abonos y consulta de jornadas        |
 
 ## Scripts Disponibles
 
-| Comando | Descripción |
-| :--- | :--- |
-| `pnpm dev` | Inicia el servidor en modo desarrollo con **Nodemon** (recarga automática al guardar cambios). |
-| `pnpm build` | Compila todo el código TypeScript y lo traduce a JavaScript puro (ideal para producción). |
-| `pnpm start` | Inicia el servidor en modo producción ejecutando el código ya compilado. |
-
-
+| Comando      | Descripción                                                                                    |
+| :----------- | :--------------------------------------------------------------------------------------------- |
+| `pnpm dev`   | Inicia el servidor en modo desarrollo con **Nodemon** (recarga automática al guardar cambios). |
+| `pnpm build` | Compila todo el código TypeScript y lo traduce a JavaScript puro (ideal para producción).      |
+| `pnpm start` | Inicia el servidor en modo producción ejecutando el código ya compilado.                       |
 
 ## Autor
 
