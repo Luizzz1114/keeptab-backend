@@ -20,7 +20,7 @@ router.use('/auth', AuthRouter);
 
 router.use(authenticate);
 
-router.use('/usuarios', UsuariosRouter)
+router.use('/usuarios', UsuariosRouter);
 router.use('/productos', ProductosRouter);
 router.use('/clientes', ClientesRouter);
 router.use('/ventas', VentasRouter);
