@@ -10,15 +10,9 @@ import Usuarios from '../models/Usuarios.model';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: process.env.PG_HOST,
-  port: Number(process.env.PG_PORT),
-  username: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_DATABASE,
+  url: process.env.DATABASE_URL,
   entities: [Productos, Clientes, Ventas, DetallesVenta, Abonos, Jornadas, Usuarios],
   synchronize: true,
   logging: false,
-  migrations: [],
-  migrationsRun: false,
   ssl: { rejectUnauthorized: false }
 });
