@@ -9,9 +9,7 @@ const app: Application = express();
 
 app.set('trust proxy', 1);
 
-const allowedOrigins = process.env.CORS_ORIGIN 
-  ? process.env.CORS_ORIGIN.split(',').map(url => url.trim())
-  : ['http://localhost:5173'];
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:5173'];
 
 app.use(helmet()); 
 
