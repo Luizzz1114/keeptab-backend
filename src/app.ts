@@ -7,6 +7,8 @@ import { generalLimiter } from './middlewares/limiter.middleware';
 
 const app: Application = express();
 
+app.set('trust proxy', 1);
+
 const allowedOrigins = process.env.CORS_ORIGIN 
   ? process.env.CORS_ORIGIN.split(',').map(url => url.trim())
   : ['http://localhost:5173'];
