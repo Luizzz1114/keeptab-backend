@@ -70,30 +70,34 @@ class AuthService {
     }
   }
 
-  async refresh(usuario: any, tokenRecibido: string) {
-    if (usuario.refreshToken !== tokenRecibido) {
-      return { success: false, type: 'FORBIDDEN', message: 'Sesión inválida o expirada' };
+  async refresh(tokenRecibido: string) {
+    if (!tokenRecibido) {
+      return { success: false, type: 'UNAUTHORIZED', message: 'No hay token de refresco' };
     }
-
-    const nuevoAccessToken = jwt.sign(
-      { id: usuario.id, username: usuario.username, rol: usuario.rol },
-      process.env.JWT_ACCESS_SECRET as string,
-      { expiresIn: '15m' }
-    );
-
-    const nuevoRefreshToken = jwt.sign(
-      { id: usuario.id, username: usuario.username },
-      process.env.JWT_REFRESH_SECRET as string,
-      { expiresIn: '7d' }
-    );
-
-    usuario.refreshToken = nuevoRefreshToken;
-
     try {
+      const payload = jwt.verify(tokenRecibido, process.env.JWT_REFRESH_SECRET as string) as any;
+      const usuario = await this.repository.getById(payload.id); 
+      if (!usuario) {
+        return { success: false, type: 'UNAUTHORIZED', message: 'Usuario no encontrado' };
+      }
+      if (usuario.refreshToken !== tokenRecibido) {
+        return { success: false, type: 'FORBIDDEN', message: 'Sesión inválida o expirada' };
+      }
+      const nuevoAccessToken = jwt.sign(
+        { id: usuario.id, username: usuario.username, rol: usuario.rol },
+        process.env.JWT_ACCESS_SECRET as string,
+        { expiresIn: '15m' }
+      );
+      const nuevoRefreshToken = jwt.sign(
+        { id: usuario.id, username: usuario.username },
+        process.env.JWT_REFRESH_SECRET as string,
+        { expiresIn: '7d' }
+      );
+      usuario.refreshToken = nuevoRefreshToken;
       await this.repository.update(usuario);
       return { success: true, data: { accessToken: nuevoAccessToken, refreshToken: nuevoRefreshToken } };
     } catch (error) {
-      return { success: false, type: 'DB_ERROR' };
+      return { success: false, type: 'FORBIDDEN', message: 'Sesión inválida o expirada' };
     }
   }
 
