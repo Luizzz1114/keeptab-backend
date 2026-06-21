@@ -43,9 +43,8 @@ class AuthController {
 
   static async refresh(req: Request, res: Response) {
     const refreshTokenOld = req.cookies.refreshToken;
-    const usuario = req.user;
     try {
-      const resultado = await authService.refresh(usuario, refreshTokenOld);
+      const resultado = await authService.refresh(refreshTokenOld);
       if (!resultado.success) {
         return sendError(res, resultado.type, resultado.message);
       }
